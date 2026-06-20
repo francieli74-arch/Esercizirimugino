@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Esercizi per il Rimuginio &mdash; Guida pratica</title>
+<style>
+/* ═══════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; scroll-padding-top: 80px; }
+:root {
+  --primary: #0d6e6b;
+  --primary-dark: #08524f;
+  --primary-light: #e2f3f1;
+  --accent: #d4652a;
+  --accent-light: #fdf0e9;
+  --bg: #f6f4f1;
+  --card-bg: #ffffff;
+  --text: #1e1e1e;
+  --text-secondary: #5a5a5a;
+  --border: #ddd6ce;
+  --success: #2e7d32;
+  --shadow: 0 2px 8px rgba(0,0,0,.07);
+  --radius: 12px;
+  --max-width: 960px;
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+  padding-top: 64px;
+}
+a { color: var(--primary); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; }
+img { max-width: 100%; height: auto; }
+
+/* ═══════════════════════════════════════
+   HEADER
+   ═══════════════════════════════════════ */
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: var(--primary-dark);
+  color: #fff;
+  padding: 0 16px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.15);
+}
+header .logo { font-weight: 700; font-size: 18px; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+header .logo small { font-weight: 400; font-size: 13px; opacity: .75; display: none; }
+@media (min-width: 500px) { header .logo small { display: inline; } }
+
+/* Progress bar */
+.progress-wrap { display: flex; align-items: center; gap: 8px; }
+.progress-bar { width: 80px; height: 6px; background: rgba(255,255,255,.2); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: #ffb703; width: 0; border-radius: 3px; transition: width .4s ease; }
+.progress-text { font-size: 12px; opacity: .8; min-width: 28px; text-align: right; }
+
+/* Hamburger */
+.hamburger {
+  background: none; border: none; color: #fff; font-size: 28px;
+  cursor: pointer; padding: 4px 8px; border-radius: 6px;
+  line-height: 1; display: flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px;
+}
+.hamburger:hover { background: rgba(255,255,255,.1); }
+@media (min-width: 768px) { .hamburger { display: none; } }
+
+/* ═══════════════════════════════════════
+   SIDEBAR NAV
+   ═══════════════════════════════════════ */
+nav.sidebar {
+  position: fixed; top: 64px; left: 0; bottom: 0; width: 260px;
+  background: #fff; border-right: 1px solid var(--border);
+  overflow-y: auto; padding: 16px 0; z-index: 99;
+  transform: translateX(-100%);
+  transition: transform .25s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+nav.sidebar.open { transform: translateX(0); }
+nav.sidebar a {
+  display: block; padding: 8px 20px; font-size: 14px; color: var(--text-secondary);
+  border-left: 3px solid transparent; transition: all .15s;
+}
+nav.sidebar a:hover, nav.sidebar a.active {
+  color: var(--primary); text-decoration: none; background: var(--primary-light);
+  border-left-color: var(--primary); font-weight: 600;
+}
+nav.sidebar .part-label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+  color: #999; padding: 16px 20px 4px; font-weight: 700;
+}
+/* Overlay for mobile */
+.sidebar-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.3); z-index: 98;
+  opacity: 0; pointer-events: none; transition: opacity .3s;
+}
+.sidebar-overlay.show { opacity: 1; pointer-events: auto; }
+
+@media (min-width: 768px) {
+  nav.sidebar { transform: translateX(0); }
+  .sidebar-overlay { display: none; }
+  body { padding-left: 260px; }
+  header { left: 260px; }
+}
+
+/* ═══════════════════════════════════════
+   MAIN CONTENT
+   ═══════════════════════════════════════ */
+main {
+  max-width: var(--max-width); margin: 0 auto; padding: 24px 16px 80px;
+}
+
+/* ═══════════════════════════════════════
+   INTRO / HERO
+   ═══════════════════════════════════════ */
+.hero {
+  text-align: center; padding: 32px 0 40px;
+}
+.hero h1 { font-size: 28px; color: var(--primary-dark); margin-bottom: 8px; }
+.hero p { font-size: 16px; color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+@media (min-width: 600px) { .hero h1 { font-size: 36px; } .hero p { font-size: 18px; } }
+
+/* ═══════════════════════════════════════
+   SECTIONS & CARDS
+   ═══════════════════════════════════════ */
+section { margin-bottom: 48px; }
+.section-title {
+  font-size: 22px; color: var(--primary-dark);
+  padding-bottom: 8px; border-bottom: 3px solid var(--primary);
+  margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
+}
+.section-title .badge {
+  font-size: 14px; background: var(--primary); color: #fff;
+  border-radius: 20px; padding: 1px 12px; font-weight: 600;
+}
+
+.exercise {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px 20px 24px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  transition: border-color .2s, box-shadow .2s;
+  position: relative;
+}
+.exercise:hover { border-color: var(--border); box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+.exercise.done { border-left: 4px solid var(--success); }
+
+.exercise h3 {
+  font-size: 18px; color: var(--primary); margin-bottom: 4px;
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.exercise h3 .num {
+  background: var(--primary-light); color: var(--primary);
+  border-radius: 8px; padding: 0 10px; font-size: 14px;
+  white-space: nowrap; flex-shrink: 0; margin-top: 1px;
+}
+.exercise .meta {
+  font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;
+  display: flex; flex-wrap: wrap; gap: 6px 16px;
+}
+.exercise .meta span { display: inline-flex; align-items: center; gap: 4px; }
+.exercise ol, .exercise ul { padding-left: 20px; margin: 8px 0; }
+.exercise li { margin-bottom: 4px; }
+.exercise li::marker { color: var(--primary); font-weight: 600; }
+
+/* Checkbox */
+.chk-wrap {
+  display: flex; align-items: center; gap: 10px; margin-top: 16px;
+  padding-top: 14px; border-top: 1px solid var(--border);
+}
+.chk-wrap input[type="checkbox"] {
+  width: 22px; height: 22px; accent-color: var(--success); cursor: pointer;
+  flex-shrink: 0;
+}
+.chk-wrap label { font-size: 14px; color: var(--text-secondary); cursor: pointer; }
+
+/* Note box */
+.note {
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px; padding: 14px 16px; margin: 12px 0;
+  font-size: 14px; color: #4a2a10;
+}
+.note strong { color: var(--accent); }
+
+/* Box varianti */
+.variants {
+  background: var(--primary-light);
+  border-radius: 8px; padding: 14px 16px; margin: 12px 0;
+  font-size: 14px;
+}
+.variants strong { color: var(--primary); }
+
+/* ═══════════════════════════════════════
+   TABLES (responsive)
+   ═══════════════════════════════════════ */
+.table-wrap { overflow-x: auto; margin: 12px 0; border-radius: 8px; border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 400px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+th { background: var(--primary-light); color: var(--primary-dark); font-weight: 600; font-size: 13px; }
+tr:last-child td { border-bottom: none; }
+@media (max-width: 500px) { table { font-size: 13px; } th, td { padding: 8px 10px; } }
+
+/* ═══════════════════════════════════════
+   PROGRESSION TIMELINE
+   ═══════════════════════════════════════ */
+.timeline { padding-left: 0; list-style: none; }
+.timeline li {
+  position: relative; padding: 0 0 20px 28px; border-left: 3px solid var(--primary);
+  margin: 0; font-size: 15px;
+}
+.timeline li::before {
+  content: attr(data-week); position: absolute; left: -14px; top: 0;
+  background: var(--primary); color: #fff; font-size: 11px; font-weight: 700;
+  width: 26px; height: 26px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center;
+}
+.timeline li:last-child { border-left-color: transparent; padding-bottom: 0; }
+.timeline li strong { color: var(--primary-dark); }
+
+/* ═══════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════ */
+footer {
+  text-align: center; padding: 32px 16px; color: var(--text-secondary);
+  font-size: 13px; border-top: 1px solid var(--border); margin-top: 24px;
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE TWEAKS
+   ═══════════════════════════════════════ */
+@media (min-width: 768px) {
+  .exercise { padding: 24px 28px; }
+  .exercise h3 { font-size: 20px; }
+}
+
+/* ─── SIDEBAR RESET BUTTON ─── */
+.sidebar-reset-wrap { padding: 24px 20px; border-top: 1px solid var(--border); margin-top: 16px; }
+.sidebar-reset-btn {
+  width: 100%; padding: 10px; background: #fff; border: 1px solid #cc0000;
+  color: #cc0000; border-radius: var(--radius); cursor: pointer;
+  font-weight: 600; font-size: 13px; transition: background .2s;
+}
+.sidebar-reset-btn:hover { background: #fff5f5; }
+
+/* Print */
+@media print {
+  header, nav.sidebar, .sidebar-overlay, .hamburger, .chk-wrap { display: none !important; }
+  body { padding: 0; }
+  .exercise { break-inside: avoid; border: 1px solid #ddd; }
+}
+
+/* ═══════════════════════════════════════
+   DIARY INPUT STYLES
+   ═══════════════════════════════════════ */
+.diary-input {
+  width: 52px; padding: 4px 2px; text-align: center; font-size: 15px;
+  border: 1px solid var(--border); border-radius: 6px; background: #fff;
+  font-family: var(--font); transition: border-color .2s;
+}
+.diary-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(13,110,107,.15); }
+.diary-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.diary-input[type=number] { -moz-appearance: textfield; }
+td:has(.diary-input) { padding: 6px 8px; white-space: nowrap; }
+.diary-check { width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer; flex-shrink: 0; }
+td:has(.diary-check) { text-align: center; padding: 4px 6px; }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <button class="hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
+  <div class="logo">Esercizi Rimuginio <small>&mdash; Guida pratica MCT</small></div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">0/24</span>
+  </div>
+</header>
+
+<!-- ═══ OVERLAY ═══ -->
+<div class="sidebar-overlay" id="overlay"></div>
+
+<!-- ═══ SIDEBAR ═══ -->
+<nav class="sidebar" id="sidebar">
+  <a href="#intro" class="active">Introduzione</a>
+  <div class="part-label">Parte 1 &mdash; ATT</div>
+  <a href="#ex1">1 &ndash; ATT Base</a>
+  <a href="#ex2">2 &ndash; ATT Breve</a>
+  <a href="#ex3">3 &ndash; ATT a Occhi Aperti</a>
+  <a href="#ex4">4 &ndash; Diario ATT</a>
+  <div class="part-label">Parte 2 &mdash; Detached Mindfulness</div>
+  <a href="#ex5">5 &ndash; La Tigre</a>
+  <a href="#ex6">6 &ndash; La Radio</a>
+  <a href="#ex7">7 &ndash; Soppressione vs Non-Intervento</a>
+  <a href="#ex8">8 &ndash; Parole che Attivano</a>
+  <a href="#ex9">9 &ndash; Etichettare i Pensieri</a>
+  <a href="#ex10">10 &ndash; Il Fiume</a>
+  <a href="#ex11">11 &ndash; I 6 Punti</a>
+  <div class="part-label">Parte 3 &mdash; Worry Postponement</div>
+  <a href="#ex12">12 &ndash; Impostare il Momento Preoccupazione</a>
+  <a href="#ex13">13 &ndash; Test dei 15 Secondi</a>
+  <a href="#ex14">14 &ndash; Progressione del Rinvio</a>
+  <div class="part-label">Parte 4 &mdash; Esposizione</div>
+  <a href="#ex15">15 &ndash; Rimuginio Volontario</a>
+  <a href="#ex16">16 &ndash; Test Posso Impazzire?</a>
+  <a href="#ex17">17 &ndash; Rimuginio Programmato</a>
+  <div class="part-label">Parte 5 &mdash; Mantenimento</div>
+  <a href="#ex18">18 &ndash; Valutazione Quotidiana</a>
+  <a href="#ex19">19 &ndash; Piano Anti-Ricaduta</a>
+  <a href="#ex20">20 &ndash; Scenario Cosa Fare Se</a>
+  <a href="#ex21">21 &ndash; Le 2 Settimane di Prova</a>
+  <a href="#ex22">22 &ndash; Cassetta degli Attrezzi</a>
+  <a href="#ex23">23 &ndash; Diario Settimanale</a>
+  <a href="#ex24">24 &ndash; Il Tuo Terapeuta Interiore</a>
+  <div class="part-label">Progressione</div>
+  <a href="#prossimi-passi">Prossimi Passi</a>
+  <div class="sidebar-reset-wrap">
+    <button class="sidebar-reset-btn" id="resetBtn">Resetta tutti i progressi</button>
+  </div>
+</nav>
+
+<!-- ═══ MAIN ═══ -->
+<main>
+
+<!-- ───── INTRO ───── -->
+<section id="intro">
+  <div class="hero">
+    <h1>Esercizi Pratici per Gestire il Rimuginio</h1>
+    <p>24 esercizi passo-passo basati sulla Terapia Metacognitiva (MCT). Fai un esercizio alla volta, con costanza. Non serve la perfezione.</p>
+  </div>
+
+  <div class="exercise">
+    <h3><span class="num">&#9679;</span> Come usare questa guida</h3>
+    <ul>
+      <li>Leggi un esercizio alla volta. Non saltare da uno all&rsquo;altro.</li>
+      <li>Prova ogni esercizio almeno 3&ndash;4 volte prima di decidere se ti serve.</li>
+      <li>Spunta la casella &ldquo;Fatto&rdquo; quando completi un esercizio &mdash; il progresso si salva automaticamente.</li>
+      <li>Segui l&rsquo;ordine della <a href="#prossimi-passi">progressione consigliata</a> in fondo alla pagina.</li>
+    </ul>
+    <div class="note"><strong>Importante:</strong> Se segui un percorso con un terapeuta, parlane con lui prima di iniziare gli esercizi della Parte 4 (Esposizione).</div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     PARTE 1 — ATT
+     ═══════════════════════════════════════ -->
+<section>
+  <h2 class="section-title">Parte 1 <span class="badge">ATT</span> &mdash; L&rsquo;Allenamento Attentivo</h2>
+  <p style="margin-bottom:16px;color:var(--text-secondary)">Questi esercizi allenano la tua attenzione a spostarsi via dalla preoccupazione. Come in palestra: risultati dopo 4&ndash;6 settimane di pratica costante, non dopo 2 giorni.</p>
+
+  <div class="exercise" id="ex1">
+    <h3><span class="num">Esercizio 1</span> L&rsquo;ATT Base &mdash; 3 Fasi</h3>
+    <div class="meta">
+      <span>&#9200; 12&ndash;15 minuti</span>
+      <span>&#128259; 2 volte al giorno (mattina e sera)</span>
+      <span>&#128197; Per 6 settimane</span>
+    </div>
+    <p><strong>Obiettivo:</strong> imparare a spostare l&rsquo;attenzione <em>nonostante</em> l&rsquo;ansia. Non serve a calmarti.</p>
+
+    <h4 style="color:var(--primary);margin:12px 0 4px">Fase 1 &mdash; Attenzione Selettiva (5 minuti)</h4>
+    <ol>
+      <li>Metti un timer per 15 minuti.</li>
+      <li>Chiudi gli occhi.</li>
+      <li>Scegli <strong>UN</strong> suono intorno a te: ticchettio dell&rsquo;orologio, computer, traffico fuori.</li>
+      <li>Focalizzati SOLO su quel suono. Tutto il resto &mdash; altri rumori, pensieri, sensazioni &mdash; e&rsquo; solo sfondo.</li>
+      <li>Ogni volta che arriva un pensiero, non ti arrabbiare. Lo noti e riporti l&rsquo;attenzione al suono.</li>
+      <li>Continua fino al timer (5 min).</li>
+    </ol>
+
+    <h4 style="color:var(--primary);margin:12px 0 4px">Fase 2 &mdash; Attenzione Alternata Rapida (5 minuti)</h4>
+    <ol>
+      <li>Prepara un file audio con suoni diversi (campane, pioggia, vento) oppure chiedi a qualcuno di guidarti.</li>
+      <li>Quando senti un suono, sposti l&rsquo;attenzione IMMEDIATAMENTE su quello. Non pensarci, lo fai e basta.</li>
+      <li>Il ritmo accelera: all&rsquo;inizio ogni 5&ndash;7 secondi, poi ogni 3&ndash;4.</li>
+      <li>Se arriva un pensiero durante un cambio, lo ignori e segui il suono successivo.</li>
+    </ol>
+    <div class="note"><strong>Attenzione:</strong> Non decidere tu i suoni mentre sei a occhi chiusi. Usa una registrazione. La guida vocale esterna impedisce al cervello di &ldquo;pianificare&rdquo; i salti.</div>
+
+    <h4 style="color:var(--primary);margin:12px 0 4px">Fase 3 &mdash; Attenzione Divisa (2 minuti)</h4>
+    <ol>
+      <li>Allarga il campo di ascolto. Prova ad ascoltare TUTTI i suoni contemporaneamente, come un tappeto sonoro.</li>
+      <li>Non focalizzarti su nessuno. Lasciali tutti sullo stesso piano.</li>
+      <li>I pensieri? Stessa cosa: sono suoni nella mente. Li lasci l&igrave; insieme a tutto il resto.</li>
+    </ol>
+
+    <div class="variants"><strong>Problemi comuni:</strong>
+      <ul style="margin:4px 0 0 16px">
+        <li><em>Mi addormento:</em> apri leggermente gli occhi o fallo in piedi. Non deve rilassarti.</li>
+        <li><em>Penso &ldquo;non funziona&rdquo;:</em> l&rsquo;ATT non toglie i pensieri. Ogni volta che torni al suono, l&rsquo;esercizio funziona.</li>
+        <li><em>Non sento suoni:</em> usa una traccia audio specifica per ATT.</li>
+      </ul>
+    </div>
+
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk1" data-key="ex1">
+      <label for="chk1">Ho fatto questo esercizio almeno 2 volte oggi</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex2">
+    <h3><span class="num">Esercizio 2</span> ATT Breve (3 minuti)</h3>
+    <div class="meta"><span>&#9200; 3 minuti</span><span>&#128259; Nei momenti di picco del rimuginio</span></div>
+    <p>Da usare quando senti di &ldquo;perdere il controllo&rdquo; o hai un picco di ansia.</p>
+    <ol>
+      <li>30 secondi: scegli un suono e ascolta SOLO quello.</li>
+      <li>90 secondi: alterna suoni velocemente (ogni 5&ndash;7 secondi).</li>
+      <li>60 secondi: ascolta tutto insieme, senza focalizzare niente.</li>
+    </ol>
+    <p style="font-size:14px;color:var(--text-secondary)">Si fa anche in ufficio, in macchina (a occhi aperti), o prima di una riunione.</p>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk2" data-key="ex2">
+      <label for="chk2">Ho fatto questo esercizio oggi</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex3">
+    <h3><span class="num">Esercizio 3</span> ATT con gli Occhi Aperti</h3>
+    <div class="meta"><span>Variante per quando non puoi chiudere gli occhi</span></div>
+    <ol>
+      <li>Tieni gli occhi aperti e fissa un punto sulla parete.</li>
+      <li>Invece dei suoni, usa la VISTA: scegli un oggetto (angolo del quadro, macchia sul muro). Focalizzati SOLO su quello.</li>
+      <li>Fase 2: alterna lo sguardo tra 3 oggetti. Ogni cambio e&rsquo; immediato.</li>
+      <li>Fase 3: guarda tutto il campo visivo senza fissare niente.</li>
+    </ol>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk3" data-key="ex3">
+      <label for="chk3">Ho fatto questo esercizio oggi</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex4">
+    <h3><span class="num">Esercizio 4</span> Diario dell&rsquo;ATT</h3>
+    <div class="meta"><span>&#9200; 30 secondi</span><span>&#128259; Dopo ogni sessione di ATT</span></div>
+    <p>Compila ogni giorno per monitorare la tua costanza.</p>
+    <div class="table-wrap">
+    <table>
+      <tr><th>Giorno</th><th>Mattina</th><th>Sera</th><th>Difficolt&agrave; (0&ndash;10)</th></tr>
+      <tr><td>Luned&igrave;</td><td><input type="checkbox" class="diary-check" data-t="ex4" data-d="0" data-c="0"></td><td><input type="checkbox" class="diary-check" data-t="ex4" data-d="0" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex4" data-d="0" data-c="2"></td></tr>
+      <tr><td>Marted&igrave;</td><td><input type="checkbox" class="diary-check" data-t="ex4" data-d="1" data-c="0"></td><td><input type="checkbox" class="diary-check" data-t="ex4" data-d="1" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex4" data-d="1" data-c="2"></td></tr>
+      <tr><td>Mercoled&igrave;</td><td><input type="checkbox" class="diary-check" data-t="ex4" data-d="2" data-c="0"></td><td><input type="checkbox" class="diary-check" data-t="ex4" data-d="2" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex4" data-d="2" data-c="2"></td></tr>
+      <tr><td>Gioved&igrave;</td><td><input type="checkbox" class="diary-check" data-t="ex4" data-d="3" data-c="0"></td><td><input type="checkbox" class="diary-check" data-t="ex4" data-d="3" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex4" data-d="3" data-c="2"></td></tr>
+      <tr><td>Venerd&igrave;</td><td><input type="checkbox" class="diary-check" data-t="ex4" data-d="4" data-c="0"></td><td><input type="checkbox" class="diary-check" data-t="ex4" data-d="4" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex4" data-d="4" data-c="2"></td></tr>
+      <tr><td>Sabato</td><td><input type="checkbox" class="diary-check" data-t="ex4" data-d="5" data-c="0"></td><td><input type="checkbox" class="diary-check" data-t="ex4" data-d="5" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex4" data-d="5" data-c="2"></td></tr>
+      <tr><td>Domenica</td><td><input type="checkbox" class="diary-check" data-t="ex4" data-d="6" data-c="0"></td><td><input type="checkbox" class="diary-check" data-t="ex4" data-d="6" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex4" data-d="6" data-c="2"></td></tr>
+    </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-top:8px"><strong>Obiettivo:</strong> almeno 12 sessioni su 14 nella settimana. La difficolt&agrave; media dovrebbe scendere col tempo.</p>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk4" data-key="ex4">
+      <label for="chk4">Ho compilato il diario oggi</label>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     PARTE 2 — DETACHED MINDFULNESS
+     ═══════════════════════════════════════ -->
+<section>
+  <h2 class="section-title">Parte 2 <span class="badge">DM</span> &mdash; Osservare i Pensieri da Lontano</h2>
+  <p style="margin-bottom:16px;color:var(--text-secondary)">Impari a stare con i tuoi pensieri senza farti risucchiare. Un pensiero e&rsquo; solo un evento mentale, non un fatto reale. Tu puoi osservarlo senza doverlo seguire, analizzare o combattere.</p>
+
+  <div class="exercise" id="ex5">
+    <h3><span class="num">Esercizio 5</span> La Tigre</h3>
+    <div class="meta"><span>&#9200; 5 minuti</span><span>&#128259; Una volta al giorno, dopo 1 settimana di ATT</span></div>
+    <ol>
+      <li>Chiudi gli occhi.</li>
+      <li>Immagina una tigre. Non una tigre specifica. Una tigre qualunque.</li>
+      <li>Osservala. Non dirle di camminare, non dirle di fermarsi. Non farle fare niente.</li>
+      <li>Limitati a guardare cosa fa da sola.</li>
+      <li>Dopo 30&ndash;40 secondi, apri gli occhi.</li>
+    </ol>
+    <p><strong>Rifletti:</strong> la tigre faceva cose da sola? Hai mai comandato tu i suoi movimenti? I pensieri funzionano allo stesso modo: arrivano da soli, si muovono da soli, se ne vanno da soli.</p>
+    <div class="variants"><strong>Varianti:</strong>
+      <ul style="margin:4px 0 0 16px">
+        <li><em>La foglia sul ruscello:</em> ogni pensiero e&rsquo; una foglia che galleggia. La guardi passare senza prenderla.</li>
+        <li><em>Le nuvole nel cielo:</em> i pensieri sono nuvole. Tu sei il cielo, non le nuvole.</li>
+        <li><em>Il treno dei pensieri:</em> sei su una panchina. I pensieri sono treni che passano. Non devi salirci sopra.</li>
+      </ul>
+    </div>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk5" data-key="ex5">
+      <label for="chk5">Ho fatto questo esercizio oggi</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex6">
+    <h3><span class="num">Esercizio 6</span> La Radio in un&rsquo;Altra Stanza</h3>
+    <div class="meta"><span>&#9200; 3&ndash;5 minuti</span><span>&#128259; Quando un pensiero ti sta agganciando</span></div>
+    <ol>
+      <li>Prendi la preoccupazione che hai in questo momento.</li>
+      <li>Immagina che sia una radio accesa in un&rsquo;altra stanza.</li>
+      <li>La senti? S&igrave;. Ti d&agrave; fastidio? Forse. Ma non sei obbligato ad ascoltarla.</li>
+      <li>Ogni volta che ti accorgi che stai seguendo la radio, riporta l&rsquo;attenzione a quello che stai facendo.</li>
+    </ol>
+    <p><strong>Progressione:</strong> Giorno 1&ndash;3: radio a 5 metri. Giorno 4&ndash;6: a 10 metri. Giorno 7+: in un&rsquo;altra stanza. Variante: abbassa il volume da 10 a 0 in 10 secondi.</p>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk6" data-key="ex6">
+      <label for="chk6">Ho fatto questo esercizio oggi</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex7">
+    <h3><span class="num">Esercizio 7</span> Soppressione vs. Non-Intervento</h3>
+    <div class="meta"><span>&#9200; 5 minuti</span><span>&#128259; Un test da fare 2&ndash;3 volte</span></div>
+    <p><strong>Parte 1 &mdash; Soppressione (30 sec):</strong></p>
+    <ol>
+      <li>Pensa a una preoccupazione specifica di questa settimana.</li>
+      <li>Per 30 secondi, cerca di NON PENSARCI ASSOLUTAMENTE. Bloccala con tutta la forza.</li>
+      <li>Risultato? Probabilmente hai pensato ancora di pi&ugrave; alla preoccupazione.</li>
+    </ol>
+    <p><strong>Parte 2 &mdash; Non-Intervento (30 sec):</strong></p>
+    <ol>
+      <li>Stessa preoccupazione. Per 30 secondi, permettiti di pensarla senza analizzarla.</li>
+      <li>Lasciala l&igrave; come una radio in un&rsquo;altra stanza. La senti ma non le dai importanza.</li>
+    </ol>
+    <div class="note"><strong>Cosa hai scoperto:</strong> La soppressione AUMENTA il pensiero. Il non-intervento lo indebolisce. Quando smetti di combattere un pensiero, lui perde potenza.</div>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk7" data-key="ex7">
+      <label for="chk7">Ho fatto questo test oggi</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex8">
+    <h3><span class="num">Esercizio 8</span> Le Parole che Attivano</h3>
+    <div class="meta"><span>&#9200; 5&ndash;8 minuti</span><span>&#128259; 2&ndash;3 volte prima del Worry Postponement</span></div>
+    <p><strong>Fase 1 &mdash; Parole neutre:</strong> Chiedi a qualcuno di leggerti queste parole, una alla volta con 3&ndash;4 secondi di pausa. Tu ascolti e basta. Se arriva un pensiero, lo lasci passare e torni alla parola successiva.</p>
+    <div class="variants">Tavolo &mdash; Nuvola &mdash; Finestra &mdash; Libro &mdash; Strada &mdash; Cielo &mdash; Sedia &mdash; Acqua &mdash; Montagna &mdash; Pianta &mdash; Porta &mdash; Lampada &mdash; Tappeto &mdash; Specchio &mdash; Cuscino</div>
+    <p style="margin-top:8px"><strong>Fase 2 &mdash; Parole emotive:</strong> Stessa procedura con parole che per te sono cariche.</p>
+    <div class="variants">Fallimento &mdash; Insicurezza &mdash; Giudizio &mdash; Rifiuto &mdash; Solitudine &mdash; Errore &mdash; Vergogna &mdash; Inadeguatezza &mdash; Perdita &mdash; Critica &mdash; Abbandono &mdash; Esclusione &mdash; Delusione &mdash; Impazzire &mdash; Catastrofe</div>
+    <div class="note"><strong>Se una parola ti aggancia:</strong> Fai un respiro. Ricordati: &ldquo;E&rsquo; solo una parola. Non pu&ograve; farmi nulla.&rdquo; Poi torna ad ascoltare la prossima.</div>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk8" data-key="ex8">
+      <label for="chk8">Ho fatto questo esercizio oggi</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex9">
+    <h3><span class="num">Esercizio 9</span> Etichettare i Pensieri</h3>
+    <div class="meta"><span>&#9200; 5 minuti</span><span>&#128259; In qualunque momento della giornata</span></div>
+    <ol>
+      <li>Per 3 minuti, nota i pensieri che arrivano.</li>
+      <li>Per ognuno, dagli un&rsquo;etichetta: &ldquo;preoccupazione&rdquo;, &ldquo;pianificazione&rdquo;, &ldquo;ricordo&rdquo;, &ldquo;giudizio&rdquo;, &ldquo;fantasia&rdquo;, &ldquo;rimuginio&rdquo;.</li>
+      <li>Non analizzare il contenuto. Solo etichetta e passa al prossimo.</li>
+    </ol>
+    <p style="font-size:14px;color:var(--text-secondary)"><strong>Esempio:</strong> &ldquo;E se domani va male?&rdquo; &rarr; &ldquo;Preoccupazione&rdquo;. &ldquo;Ieri ho detto una stupidaggine&rdquo; &rarr; &ldquo;Rimuginio&rdquo;.</p>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk9" data-key="ex9">
+      <label for="chk9">Ho fatto questo esercizio oggi</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex10">
+    <h3><span class="num">Esercizio 10</span> Il Fiume dei Pensieri</h3>
+    <div class="meta"><span>&#9200; 10 minuti</span><span>&#128259; Dopo aver imparato gli esercizi 5&ndash;9</span></div>
+    <ol>
+      <li>Chiudi gli occhi.</li>
+      <li>Immagina di essere seduto sulla riva di un fiume. I tuoi pensieri sono oggetti che galleggiano: foglie, rametti, barchette.</li>
+      <li>Tu sei sulla riva e li guardi passare. Non salti nel fiume per afferrarli. Non devii il corso del fiume.</li>
+      <li>Se ti accorgi che sei saltato nel fiume (ti sei perso in un pensiero), torni sulla riva. Senza giudizio.</li>
+      <li>Dopo 10 minuti, apri lentamente gli occhi.</li>
+    </ol>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk10" data-key="ex10">
+      <label for="chk10">Ho fatto questo esercizio oggi</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex11">
+    <h3><span class="num">Esercizio 11</span> I 6 Punti della DM</h3>
+    <div class="meta"><span>&#9200; 1 minuto</span><span>&#128259; Ogni mattina, per la prima settimana</span></div>
+    <p>Leggi questi 6 punti ogni mattina come promemoria:</p>
+    <ol>
+      <li><strong>NOTO</strong> il pensiero nel momento in cui arriva (non dopo 20 minuti di rimuginio).</li>
+      <li><strong>RICORDO</strong> che e&rsquo; un evento mentale, non un fatto reale.</li>
+      <li><strong>SO</strong> che posso spostare l&rsquo;attenzione altrove.</li>
+      <li><strong>NON ANALIZZO</strong> il contenuto. Non lo seguo.</li>
+      <li><strong>NON SOPPRIMO</strong> il pensiero. Lo lascio stare.</li>
+      <li><strong>SONO</strong> l&rsquo;osservatore dei miei pensieri, non i miei pensieri.</li>
+    </ol>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk11" data-key="ex11">
+      <label for="chk11">Ho letto i 6 punti oggi</label>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     PARTE 3 — WORRY POSTPONEMENT
+     ═══════════════════════════════════════ -->
+<section>
+  <h2 class="section-title">Parte 3 <span class="badge">WP</span> &mdash; Rimandare le Preoccupazioni</h2>
+  <p style="margin-bottom:16px;color:var(--text-secondary)">Si inizia SOLO dopo almeno 2 settimane di ATT. L&rsquo;ATT ti ha dato i &ldquo;muscoli attentivi&rdquo; per poter rimandare. Senza quelli, il rinvio fallisce.</p>
+
+  <div class="exercise" id="ex12">
+    <h3><span class="num">Esercizio 12</span> Impostare il Momento Preoccupazione</h3>
+    <div class="meta"><span>&#9200; 15 minuti al giorno</span><span>&#128259; Ogni giorno, orario fisso</span></div>
+
+    <h4 style="color:var(--primary);margin:12px 0 4px">Passo 1 &mdash; Scegli orario e luogo</h4>
+    <ul>
+      <li>Scegli un orario FISSO ogni giorno (es. 17:00).</li>
+      <li>Scegli un posto neutro: cucina o scrivania. <strong>MAI in camera da letto. MAI prima di dormire.</strong></li>
+      <li>Metti un timer per 15 minuti esatti.</li>
+    </ul>
+
+    <h4 style="color:var(--primary);margin:12px 0 4px">Passo 2 &mdash; Durante la giornata</h4>
+    <ul>
+      <li>Appena arriva una preoccupazione, la SCRIVI su un block notes (3&ndash;4 parole chiave).</li>
+      <li>Poi ti dici: &ldquo;Lo affronter&ograve; alle 17:00.&rdquo;</li>
+      <li>Riporti l&rsquo;attenzione su quello che stavi facendo (se serve, ATT breve 30 sec).</li>
+    </ul>
+
+    <h4 style="color:var(--primary);margin:12px 0 4px">Passo 3 &mdash; Alle 17:00 apri il block notes</h4>
+    <ul>
+      <li>Item per item: &ldquo;E&rsquo; ancora rilevante?&rdquo;</li>
+      <li>Se NO &rarr; cancella (80% dei casi non lo e&rsquo; pi&ugrave;).</li>
+      <li>Se SI&rsquo; &rarr; &ldquo;Posso fare qualcosa ORA?&rdquo;. Se si&rsquo;, fallo. Se no, cancella comunque.</li>
+    </ul>
+
+    <h4 style="color:var(--primary);margin:12px 0 4px">Passo 4 &mdash; Dopo 15 minuti esatti</h4>
+    <ul>
+      <li>Il timer suona? Chiudi. Fine. Quello che resta va a domani.</li>
+    </ul>
+
+    <div class="note"><strong>Distinguere rimuginio da problem solving:</strong><br>
+    <strong>RIMUGINIO (da rimandare):</strong> &ldquo;E se non ce la faccio?&rdquo;, &ldquo;E se va male?&rdquo;, &ldquo;Devo cercare informazioni su quel sintomo&rdquo;, &ldquo;Perch&eacute; sono cos&igrave; ansioso?&rdquo;<br>
+    <strong>PROBLEM SOLVING (da fare subito):</strong> &ldquo;Devo chiamare l&rsquo;ufficio&rdquo;, &ldquo;Devo fissare un appuntamento col medico&rdquo;, &ldquo;Devo preparare la lista dei punti&rdquo;.<br>
+    Regola: se la risposta e&rsquo; un&rsquo;azione concreta, falla subito. Se e&rsquo; un&rsquo;altra preoccupazione, rimandala.</div>
+
+    <div class="variants"><strong>Progressione:</strong><br>
+    <strong>Settimana 1:</strong> scrivi sempre sul block notes.<br>
+    <strong>Settimana 2:</strong> prova il RINVIO MENTALE &mdash; etichetti mentalmente (&ldquo;E&rsquo; rimuginio&rdquo;) e rimandi senza scrivere. Se non ce la fai, torna alla scrittura per qualche giorno e riprova.</div>
+
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk12" data-key="ex12">
+      <label for="chk12">Ho fatto il Worry Postponement oggi</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex13">
+    <h3><span class="num">Esercizio 13</span> Il Test dei 15 Secondi</h3>
+    <div class="meta"><span>&#9200; 30 secondi</span><span>&#128259; Quando pensi &ldquo;non ce la faccio a rimandare&rdquo;</span></div>
+    <ol>
+      <li>Arriva la preoccupazione. La scrivi.</li>
+      <li>Ti dici: &ldquo;Lo affronto alle [orario].&rdquo;</li>
+      <li>Riporti l&rsquo;attenzione a quello che stai facendo.</li>
+      <li>Aspetta 15 secondi. Solo 15.</li>
+      <li>Dopo 15 secondi, valuta l&rsquo;ansia da 0 a 10. Probabilmente e&rsquo; gi&agrave; calata.</li>
+    </ol>
+    <div class="note"><strong>Perch&eacute; funziona:</strong> L&rsquo;urgenza e&rsquo; un&rsquo;emozione, non un fatto. Se non la segui, cala da sola in 15&ndash;30 secondi.</div>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk13" data-key="ex13">
+      <label for="chk13">Ho usato il Test dei 15 Secondi oggi</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex14">
+    <h3><span class="num">Esercizio 14</span> Progressione del Rinvio</h3>
+    <div class="meta"><span>&#128259; Da seguire nel tempo</span></div>
+    <p>Non rimanere fermo alla stessa modalit&agrave; per sempre.</p>
+    <ul>
+      <li><strong>Settimana 1:</strong> SCRIVI ogni preoccupazione sul block notes. Fai il worry period col notes davanti.</li>
+      <li><strong>Settimana 2:</strong> Prova il RINVIO MENTALE: etichetti mentalmente (&ldquo;E&rsquo; rimuginio&rdquo;) e rimandi SENZA scrivere. Questo dimostra che hai il controllo anche senza supporti fisici.</li>
+      <li><strong>Dal mese 2:</strong> Il worry period ti serve sempre meno. Tienilo come &ldquo;rete di sicurezza&rdquo; per le giornate no.</li>
+    </ul>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk14" data-key="ex14">
+      <label for="chk14">Ho seguito la progressione oggi</label>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     PARTE 4 — ESPOSIZIONE
+     ═══════════════════════════════════════ -->
+<section>
+  <h2 class="section-title">Parte 4 <span class="badge">EXP</span> &mdash; Testare le Tue Paure sul Rimuginio</h2>
+  <p style="margin-bottom:16px;color:var(--text-secondary)">Fai questi esercizi SOLO dopo almeno 4 settimane di ATT e DM. Servono a testare concretamente le tue paure: &ldquo;Non riesco a smettere&rdquo; e &ldquo;Rimuginare mi far&agrave; impazzire&rdquo;.</p>
+  <div class="note"><strong>Importante:</strong> Se segui un terapeuta, parlane con lui prima di iniziare questa parte.</div>
+
+  <div class="exercise" id="ex15">
+    <h3><span class="num">Esercizio 15</span> Rimuginare Volontariamente</h3>
+    <div class="meta"><span>&#9200; 10 minuti</span><span>&#128259; 2&ndash;3 volte in una settimana</span></div>
+    <p><strong>Testa la credenza: &ldquo;Non riesco a smettere&rdquo;</strong></p>
+    <ol>
+      <li>Siediti in un posto tranquillo. Timer: 10 minuti.</li>
+      <li>Per i primi 5 minuti, rimugina INTENZIONALMENTE. Scegli la preoccupazione peggiore e amplificala. Cerca di farti venire pi&ugrave; ansia possibile.</li>
+      <li>Dopo 5 minuti: STOP. Molla tutto.</li>
+      <li>Nota: sei riuscito a smettere? Il pensiero si &egrave; fermato?</li>
+    </ol>
+    <p><strong>Cosa scoprirai:</strong> dopo 3&ndash;4 minuti la tua mente smette da sola di rimuginare intensamente. Sei riuscito a smettere quando hai deciso. Il rimuginio non &egrave; fuori controllo: &egrave; un&rsquo;abitudine che INIZI senza accorgertene.</p>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk15" data-key="ex15">
+      <label for="chk15">Ho fatto questo esercizio oggi</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex16">
+    <h3><span class="num">Esercizio 16</span> Test &ldquo;Posso Impazzire?&rdquo;</h3>
+    <div class="meta"><span>&#9200; 10 minuti</span><span>&#128259; Una volta, poi se necessario</span></div>
+    <p><strong>Testa la credenza: &ldquo;Rimuginare mi far&agrave; perdere la ragione&rdquo;</strong></p>
+    <ol>
+      <li>Timer: 10 minuti.</li>
+      <li>Rimugina CON L&rsquo;INTENZIONE di farti venire un esaurimento nervoso. Cerca ATTIVAMENTE di perdere il controllo.</li>
+      <li>Usa le preoccupazioni peggiori. Amplifica tutto. Cerca di farti venire il panico.</li>
+      <li>Dopo 10 minuti, fermati.</li>
+    </ol>
+    <p><strong>Domande:</strong> Hai perso il controllo? Sei impazzito? La realt&agrave; dice: &ldquo;posso rimuginare per 10 minuti e non succede niente di catastrofico&rdquo;. La credenza &ldquo;rimuginare mi far&agrave; impazzire&rdquo; &egrave; solo una paura, non un fatto.</p>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk16" data-key="ex16">
+      <label for="chk16">Ho fatto questo test oggi</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex17">
+    <h3><span class="num">Esercizio 17</span> Rimuginio Programmato a Casa</h3>
+    <div class="meta"><span>&#9200; 10 minuti &times; 3 volte</span><span>&#128259; In una settimana</span></div>
+    <ol>
+      <li>Scegli 3 momenti della settimana per rimuginare INTENZIONALMENTE.</li>
+      <li>Ogni sessione dura 10 minuti esatti (timer!).</li>
+      <li>Segna su un foglio: data, tema, ansia PRIMA (0&ndash;10), ansia DOPO (0&ndash;10), quanto controllo hai avuto nello smettere (0&ndash;10).</li>
+    </ol>
+    <p><strong>Cosa stai testando:</strong> &ldquo;Se posso INIZIARE il rimuginio quando voglio, posso anche SMETTERE quando voglio.&rdquo; La differenza &egrave; tra subire passivamente e scegliere attivamente.</p>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk17" data-key="ex17">
+      <label for="chk17">Ho fatto una sessione di rimuginio programmato oggi</label>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     PARTE 5 — MANTENIMENTO
+     ═══════════════════════════════════════ -->
+<section>
+  <h2 class="section-title">Parte 5 <span class="badge">MNT</span> &mdash; Non Ricadere</h2>
+  <p style="margin-bottom:16px;color:var(--text-secondary)">Dopo aver imparato le tecniche, la sfida &egrave; continuare a usarle. Questi esercizi ti aiutano a mantenere i progressi e prevenire le ricadute.</p>
+
+  <div class="exercise" id="ex18">
+    <h3><span class="num">Esercizio 18</span> Valutazione Quotidiana (30 secondi)</h3>
+    <div class="meta"><span>&#9200; 30 secondi</span><span>&#128259; Ogni sera prima di dormire</span></div>
+    <p>Rispondi a 3 domande su scala 0&ndash;10:</p>
+    <div class="table-wrap">
+    <table>
+      <tr><th>Giorno</th><th>1. Tempo rimuginio</th><th>2. Controllo attenzione</th><th>3. Strategie di coping</th></tr>
+      <tr><td>Luned&igrave;</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="0" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="0" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="0" data-c="2"></td></tr>
+      <tr><td>Marted&igrave;</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="1" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="1" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="1" data-c="2"></td></tr>
+      <tr><td>Mercoled&igrave;</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="2" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="2" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="2" data-c="2"></td></tr>
+      <tr><td>Gioved&igrave;</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="3" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="3" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="3" data-c="2"></td></tr>
+      <tr><td>Venerd&igrave;</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="4" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="4" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="4" data-c="2"></td></tr>
+      <tr><td>Sabato</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="5" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="5" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="5" data-c="2"></td></tr>
+      <tr><td>Domenica</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="6" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="6" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex18" data-d="6" data-c="2"></td></tr>
+    </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-top:8px"><strong>Obiettivo:</strong> 1 &darr; (sotto 3/10), 2 &uarr; (sopra 7/10), 3 &darr; (sotto 2/10) dopo 6&ndash;8 settimane.</p>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk18" data-key="ex18">
+      <label for="chk18">Ho compilato la valutazione oggi</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex19">
+    <h3><span class="num">Esercizio 19</span> Il Piano Anti-Ricaduta</h3>
+    <div class="meta"><span>&#128259; Da compilare e tenere sempre visibile</span></div>
+    <div class="table-wrap">
+    <table>
+      <tr><th>Area</th><th>Il mio piano</th></tr>
+      <tr><td>ATT di mantenimento</td><td>______ volte a settimana</td></tr>
+      <tr><td>Worry Postponement</td><td>Lo uso sempre per le preoccupazioni quotidiane</td></tr>
+      <tr><td>DM veloce (tigre/radio)</td><td>______ minuti al giorno</td></tr>
+      <tr><td>Primo segnale di ricaduta</td><td>______ (aumento rimuginio, insonnia, irritabilit&agrave;)</td></tr>
+      <tr><td>Cosa fare al primo segnale</td><td>ATT 2&times;/die per 1&ndash;2 settimane + WP</td></tr>
+      <tr><td>Se ricado forte (&gt;7 giorni)</td><td>Riprendo gli esercizi Parte 1 e 2, poi chiamo il terapeuta</td></tr>
+    </table>
+    </div>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk19" data-key="ex19">
+      <label for="chk19">Ho rivisto il mio piano oggi</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex20">
+    <h3><span class="num">Esercizio 20</span> Scenario &mdash; Cosa fare se&hellip;</h3>
+    <div class="meta"><span>&#128259; Leggi e memorizza</span></div>
+    <div class="table-wrap">
+    <table>
+      <tr><th>Se succede questo&hellip;</th><th>&hellip;io faccio questo</th></tr>
+      <tr><td>Ricevo una critica al lavoro</td><td>Noto il pensiero &rarr; etichetta &rarr; ATT 1 min &rarr; rimando a WP</td></tr>
+      <tr><td>Litigo con il partner</td><td>Respiro &rarr; &ldquo;E&rsquo; un evento mentale&rdquo; &rarr; aspetto 15 min prima di analizzare</td></tr>
+      <tr><td>Scadenza importante</td><td>Distinguo: agire o preoccuparmi? Se azione, faccio; se no, rimando</td></tr>
+      <tr><td>Sento un sintomo fisico</td><td>Noto la preoccupazione &rarr; ATT 1 min &rarr; aspetto 24 ore prima di agire</td></tr>
+      <tr><td>Non riesco a dormire</td><td>Mi alzo &rarr; scrivo le preoccupazioni &rarr; ATT &rarr; riprovo dopo 20 min</td></tr>
+      <tr><td>Evento sociale imminente</td><td>DM: &ldquo;La mente produce scenari. Sono solo pensieri.&rdquo; &rarr; WP alle 17:00</td></tr>
+      <tr><td>Mi sento giudicato</td><td>&ldquo;La mente dice X. E&rsquo; solo un pensiero.&rdquo; &rarr; ATT &rarr; rientro in quello che facevo</td></tr>
+    </table>
+    </div>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk20" data-key="ex20">
+      <label for="chk20">Ho letto gli scenari oggi</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex21">
+    <h3><span class="num">Esercizio 21</span> Le 2 Settimane di Prova</h3>
+    <div class="meta"><span>&#9200; 2 settimane</span><span>&#128259; Se non sei ancora convinto che funzioni</span></div>
+    <ol>
+      <li>Per 2 settimane, fai ATT 2 volte al giorno (anche se non senti miglioramenti).</li>
+      <li>Dal giorno 5, aggiungi il Worry Postponement.</li>
+      <li>Ogni sera, compila la Valutazione Quotidiana (Esercizio 18).</li>
+    </ol>
+    <p><strong>Alla fine:</strong> calcola la media dei 3 punteggi della prima settimana e della seconda. Confrontali. Anche 1 punto di miglioramento significa che il cervello PU&Ograve; imparare.</p>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk21" data-key="ex21">
+      <label for="chk21">Oggi &egrave; un giorno delle 2 Settimane di Prova</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex22">
+    <h3><span class="num">Esercizio 22</span> La Cassetta degli Attrezzi</h3>
+    <div class="meta"><span>&#128259; Riepilogo per ricordare cosa usare</span></div>
+    <div class="table-wrap">
+    <table>
+      <tr><th>Tecnica</th><th>Quando la uso</th></tr>
+      <tr><td>ATT completo (15 min)</td><td>Ogni giorno. Subito se il rimuginio aumenta.</td></tr>
+      <tr><td>ATT breve (3 min)</td><td>Nei momenti di picco, quando sento di perdere il controllo.</td></tr>
+      <tr><td>Esercizio della Tigre</td><td>Quando mi aggancio a un pensiero e non riesco a staccarmi.</td></tr>
+      <tr><td>Radio in un&rsquo;altra stanza</td><td>Quando un pensiero mi ossessiona.</td></tr>
+      <tr><td>Worry Postponement</td><td>Strategia quotidiana per le preoccupazioni.</td></tr>
+      <tr><td>Rimuginio Volontario</td><td>Se ricomincio a credere &ldquo;non riesco a smettere&rdquo; &mdash; lo ripeto.</td></tr>
+    </table>
+    </div>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk22" data-key="ex22">
+      <label for="chk22">Ho letto la cassetta degli attrezzi oggi</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex23">
+    <h3><span class="num">Esercizio 23</span> Diario del Rimuginio Settimanale</h3>
+    <div class="meta"><span>&#9200; 5 minuti</span><span>&#128259; Una volta a settimana</span></div>
+    <div class="table-wrap">
+    <table>
+      <tr><th>Settimana</th><th>Media rimuginio</th><th>Media controllo ATT</th><th>Media coping</th></tr>
+      <tr><td>Settimana 1</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="0" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="0" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="0" data-c="2"></td></tr>
+      <tr><td>Settimana 2</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="1" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="1" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="1" data-c="2"></td></tr>
+      <tr><td>Settimana 3</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="2" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="2" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="2" data-c="2"></td></tr>
+      <tr><td>Settimana 4</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="3" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="3" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="3" data-c="2"></td></tr>
+      <tr><td>Settimana 5</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="4" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="4" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="4" data-c="2"></td></tr>
+      <tr><td>Settimana 6</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="5" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="5" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="5" data-c="2"></td></tr>
+      <tr><td>Settimana 7</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="6" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="6" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="6" data-c="2"></td></tr>
+      <tr><td>Settimana 8</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="7" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="7" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex23" data-d="7" data-c="2"></td></tr>
+    </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-top:8px">Tienilo per almeno 8 settimane. I numeri miglioreranno gradualmente.</p>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk23" data-key="ex23">
+      <label for="chk23">Ho aggiornato il diario settimanale</label>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex24">
+    <h3><span class="num">Esercizio 24</span> Il Tuo Terapeuta Interiore</h3>
+    <div class="meta"><span>&#9200; 5&ndash;10 minuti</span><span>&#128259; Dopo aver imparato tutte le tecniche</span></div>
+    <p>Immagina che un amico abbia il tuo stesso problema e ti chieda aiuto. Come rispondi?</p>
+    <div class="table-wrap">
+    <table>
+      <tr><th>Il tuo amico dice&hellip;</th><th>Tu rispondi</th></tr>
+      <tr><td>&ldquo;Non riesco a smettere di preoccuparmi&rdquo;</td><td>&nbsp;</td></tr>
+      <tr><td>&ldquo;Ho paura che rimuginare mi faccia impazzire&rdquo;</td><td>&nbsp;</td></tr>
+      <tr><td>&ldquo;Se non mi preoccupo, succeder&agrave; qualcosa di brutto&rdquo;</td><td>&nbsp;</td></tr>
+      <tr><td>&ldquo;Ho provato ma non funziona&rdquo;</td><td>&nbsp;</td></tr>
+    </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-top:8px">Se sai rispondere a queste domande, sei pronto a essere il terapeuta di te stesso.</p>
+    <div class="chk-wrap">
+      <input type="checkbox" id="chk24" data-key="ex24">
+      <label for="chk24">Ho fatto questo esercizio oggi</label>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     PROSSIMI PASSI
+     ═══════════════════════════════════════ -->
+<section id="prossimi-passi">
+  <h2 class="section-title">Prossimi Passi</h2>
+  <p style="margin-bottom:16px;color:var(--text-secondary)">Non devi fare tutti gli esercizi in una volta. Segui questa progressione:</p>
+  <ul class="timeline">
+    <li data-week="1"><strong>Settimane 1&ndash;2:</strong> solo Esercizi 1&ndash;4 (ATT base). Nient&rsquo;altro. Due volte al giorno, tutti i giorni.</li>
+    <li data-week="3"><strong>Settimane 3&ndash;4:</strong> aggiungi Esercizi 5&ndash;11 (Detached Mindfulness). Continua ATT.</li>
+    <li data-week="5"><strong>Settimane 5&ndash;6:</strong> aggiungi Esercizi 12&ndash;14 (Worry Postponement). Continua ATT + DM.</li>
+    <li data-week="7"><strong>Settimane 7&ndash;8:</strong> aggiungi Esercizi 15&ndash;17 (Esposizione), SOLO se ti senti pronto.</li>
+    <li data-week="9+"><strong>Dal mese 3:</strong> Esercizi 18&ndash;24 (Mantenimento) per non ricadere.</li>
+  </ul>
+  <div class="note" style="margin-top:16px"><strong>Ricorda:</strong> Non serve essere perfetti. Serve provare con costanza. Ogni volta che fai un esercizio, il tuo cervello impara un po&rsquo; di pi&ugrave;.</div>
+</section>
+
+<footer>
+  <p>Basato sulla Terapia Metacognitiva (MCT) &mdash; Wells, 2009</p>
+  <p>Esercizi tratti dal protocollo clinico MCT per il rimuginio</p>
+</footer>
+
+</main>
+
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════════ -->
+<script>
+(function() {
+  // ─── Sidebar toggle ───
+  const hamburger = document.getElementById('hamburger');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+
+  function openSidebar() {
+    sidebar.classList.add('open');
+    overlay.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', function() {
+    if (sidebar.classList.contains('open')) closeSidebar();
+    else openSidebar();
+  });
+  overlay.addEventListener('click', closeSidebar);
+
+  // Close sidebar on link click (mobile)
+  sidebar.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      if (window.innerWidth < 768) closeSidebar();
+    });
+  });
+
+  // ─── Active nav link on scroll (throttled per mobile) ───
+  const sections = Array.from(document.querySelectorAll('section[id], .exercise[id]'));
+
+  function throttle(callback, delay) {
+    let lastTime = 0;
+    return function() {
+      const now = Date.now();
+      if (now - lastTime >= delay) {
+        callback();
+        lastTime = now;
+      }
+    };
+  }
+
+  function updateActiveNav() {
+    const scrollY = window.scrollY + 120;
+    let currentId = 'intro';
+    sections.forEach(function(sec) {
+      if (sec.offsetTop <= scrollY) currentId = sec.id;
+    });
+    sidebar.querySelectorAll('a').forEach(function(a) {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === '#' + currentId) a.classList.add('active');
+    });
+  }
+
+  window.addEventListener('scroll', throttle(updateActiveNav, 80));
+  updateActiveNav();
+
+  // ─── Progress / Checkboxes ───
+  const STORAGE_KEY = 'mct_exercises_progress';
+  const checkboxes = document.querySelectorAll('.chk-wrap input[type="checkbox"]');
+  const total = checkboxes.length;
+
+  function loadProgress() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (saved && typeof saved === 'object') {
+        checkboxes.forEach(function(cb) {
+          var key = cb.getAttribute('data-key');
+          if (saved[key]) {
+            cb.checked = true;
+            var ex = cb.closest('.exercise');
+            if (ex) ex.classList.add('done');
+          }
+        });
+      }
+    } catch(e) {}
+    updateProgress();
+  }
+
+  function saveProgress() {
+    var data = {};
+    checkboxes.forEach(function(cb) {
+      data[cb.getAttribute('data-key')] = cb.checked;
+    });
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
+    updateProgress();
+  }
+
+  function updateProgress() {
+    var done = 0;
+    checkboxes.forEach(function(cb) {
+      if (cb.checked) done++;
+      var ex = cb.closest('.exercise');
+      if (ex) ex.classList.toggle('done', cb.checked);
+    });
+    var pct = total > 0 ? Math.round((done / total) * 100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = done + '/' + total;
+  }
+
+  checkboxes.forEach(function(cb) {
+    cb.addEventListener('change', saveProgress);
+  });
+
+  // ─── Reset ───
+  document.getElementById('resetBtn').addEventListener('click', function() {
+    if (confirm('Resettare tutti i progressi?')) {
+      try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(DIARY_KEY); } catch(e) {}
+      checkboxes.forEach(function(cb) { cb.checked = false; });
+      document.querySelectorAll('.diary-input').forEach(function(i) { i.value = ''; });
+      document.querySelectorAll('.diary-check').forEach(function(c) { c.checked = false; });
+      updateProgress();
+    }
+  });
+
+  // ─── Diary inputs persistence ───
+  const DIARY_KEY = 'mct_diary_data';
+
+  function loadDiaryData() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(DIARY_KEY));
+      if (saved && typeof saved === 'object') {
+        document.querySelectorAll('.diary-input').forEach(function(inp) {
+          var key = inp.getAttribute('data-t') + '_' + inp.getAttribute('data-d') + '_' + inp.getAttribute('data-c');
+          if (saved[key] !== undefined) inp.value = saved[key];
+        });
+        document.querySelectorAll('.diary-check').forEach(function(cb) {
+          var key = cb.getAttribute('data-t') + '_' + cb.getAttribute('data-d') + '_' + cb.getAttribute('data-c');
+          if (saved[key]) cb.checked = true;
+        });
+      }
+    } catch(e) {}
+  }
+
+  function saveDiaryData() {
+    var data = {};
+    document.querySelectorAll('.diary-input').forEach(function(inp) {
+      var key = inp.getAttribute('data-t') + '_' + inp.getAttribute('data-d') + '_' + inp.getAttribute('data-c');
+      data[key] = inp.value;
+    });
+    document.querySelectorAll('.diary-check').forEach(function(cb) {
+      var key = cb.getAttribute('data-t') + '_' + cb.getAttribute('data-d') + '_' + cb.getAttribute('data-c');
+      data[key] = cb.checked ? true : false;
+    });
+    try { localStorage.setItem(DIARY_KEY, JSON.stringify(data)); } catch(e) {}
+  }
+
+  document.querySelectorAll('.diary-input, .diary-check').forEach(function(el) {
+    el.addEventListener('change', saveDiaryData);
+    if (el.tagName === 'INPUT' && el.type === 'number') el.addEventListener('input', saveDiaryData);
+  });
+
+  // ─── Init ───
+  loadProgress();
+  loadDiaryData();
+})();
+</script>
+
+</body>
+</html>
