@@ -1,7 +1,7 @@
 {
   "name": "Esercizi per il Rimuginio",
   "short_name": "Rimuginio",
-  "description": "24 esercizi MCT per il rimuginio. Dark mode, timer integrato.",
+  "description": "27 esercizi MCT per il rimuginio. Dark mode, timer integrato.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

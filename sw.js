@@ -1,5 +1,5 @@
 /* Service Worker — supporto offline per Esercizi Rimuginio */
-var CACHE = 'mct-v1';
+var CACHE = 'mct-v2';
 var ASSETS = [
   './',
   './index.html',
