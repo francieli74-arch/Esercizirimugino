@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="description" content="24 esercizi MCT per il rimuginio. Dark mode, timer integrato.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#08524f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <title>Esercizi per il Rimuginio &mdash; Guida pratica</title>
 <style>
 /* ═══════════════════════════════════════
@@ -197,8 +203,8 @@ section { margin-bottom: 48px; }
   padding-top: 14px; border-top: 1px solid var(--border);
 }
 .chk-wrap input[type="checkbox"] {
-  width: 22px; height: 22px; accent-color: var(--success); cursor: pointer;
-  flex-shrink: 0;
+  width: 44px; height: 44px; accent-color: var(--success); cursor: pointer;
+  flex-shrink: 0; margin: 0;
 }
 .chk-wrap label { font-size: 14px; color: var(--text-secondary); cursor: pointer; }
 
@@ -291,8 +297,10 @@ footer {
 .diary-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .diary-input[type=number] { -moz-appearance: textfield; }
 td:has(.diary-input) { padding: 6px 8px; white-space: nowrap; }
-.diary-check { width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer; flex-shrink: 0; }
-td:has(.diary-check) { text-align: center; padding: 4px 6px; }
+.meta-radio { width: 44px; height: 44px; accent-color: var(--primary); cursor: pointer; margin: 0; }
+.meta-radio-label { display: flex; align-items: center; justify-content: center; min-height: 44px; cursor: pointer; }
+td:has(.meta-radio) { text-align: center; padding: 4px 6px; }
+.diary-check { width: 44px; height: 44px; accent-color: var(--primary); cursor: pointer; flex-shrink: 0; margin: 0; }
 .ex24-ta { width: 100%; min-height: 64px; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); background: #fff; color: var(--text); font-size: 14px; font-family: var(--font); resize: vertical; transition: border-color .2s; }
 .ex24-ta:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(13,110,107,.15); }
 [data-theme="dark"] .ex24-ta { background: #1a1a1a; }
@@ -311,10 +319,10 @@ body.focus-mode nav.sidebar { transform: translateX(-100%) !important; }
 .timer-modal .timer-display { font-size: 72px; font-weight: 200; color: var(--primary); letter-spacing: -2px; margin: 16px 0; font-family: ui-monospace, monospace; }
 .timer-modal .timer-label { font-size: 14px; color: var(--text-secondary); }
 .timer-modal .timer-presets { display: flex; gap: 8px; justify-content: center; margin: 16px 0; flex-wrap: wrap; }
-.timer-modal .timer-presets button { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); cursor: pointer; font-size: 13px; font-weight: 600; transition: all .15s; font-family: var(--font); }
+.timer-modal .timer-presets button { padding: 12px 20px; border-radius: 24px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); cursor: pointer; font-size: 14px; font-weight: 600; transition: all .15s; font-family: var(--font); min-width: 64px; }
 .timer-modal .timer-presets button:hover,.timer-modal .timer-presets button.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 .timer-modal .timer-controls { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
-.timer-modal .timer-controls button { padding: 10px 24px; border-radius: 25px; border: none; cursor: pointer; font-size: 15px; font-weight: 600; font-family: var(--font); }
+.timer-modal .timer-controls button { padding: 14px 26px; border-radius: 28px; border: none; cursor: pointer; font-size: 16px; font-weight: 600; font-family: var(--font); }
 .timer-btn-start { background: var(--primary); color: #fff; }
 .timer-btn-pause { background: var(--accent); color: #fff; }
 .timer-btn-reset { background: transparent; color: var(--text-secondary); border: 1px solid var(--border) !important; }
@@ -332,6 +340,12 @@ body.focus-mode nav.sidebar { transform: translateX(-100%) !important; }
 .sidebar-actions button:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 .exercise { animation: fadeInUp .4s ease backwards; }
+@media (prefers-reduced-motion: reduce) {
+  .exercise { animation: none; }
+  .timer-alert { animation: none; }
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: .01ms !important; }
+}
 a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: 4px; }
 .chk-wrap input[type="checkbox"] { transition: transform .15s; }
 .chk-wrap input[type="checkbox"]:hover { transform: scale(1.1); }
@@ -511,35 +525,35 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
     <table>
       <tr><th>Domanda</th><th style="width:50px;text-align:center">1</th><th style="width:50px;text-align:center">2</th><th style="width:50px;text-align:center">3</th><th style="width:50px;text-align:center">4</th></tr>
       <tr><td>Rimuginare mi aiuta a evitare problemi futuri</td>
-        <td style="text-align:center"><input type="radio" name="mq1" value="1" data-t="meta_q" data-d="0" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq1" value="2" data-t="meta_q" data-d="0" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq1" value="3" data-t="meta_q" data-d="0" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq1" value="4" data-t="meta_q" data-d="0" class="meta-radio"></td></tr>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq1" value="1" data-t="meta_q" data-d="0" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq1" value="2" data-t="meta_q" data-d="0" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq1" value="3" data-t="meta_q" data-d="0" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq1" value="4" data-t="meta_q" data-d="0" class="meta-radio"></label></td></tr>
       <tr><td>Non posso controllare i miei pensieri una volta partiti</td>
-        <td style="text-align:center"><input type="radio" name="mq2" value="1" data-t="meta_q" data-d="1" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq2" value="2" data-t="meta_q" data-d="1" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq2" value="3" data-t="meta_q" data-d="1" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq2" value="4" data-t="meta_q" data-d="1" class="meta-radio"></td></tr>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq2" value="1" data-t="meta_q" data-d="1" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq2" value="2" data-t="meta_q" data-d="1" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq2" value="3" data-t="meta_q" data-d="1" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq2" value="4" data-t="meta_q" data-d="1" class="meta-radio"></label></td></tr>
       <tr><td>Se rimugino troppo potrei perdere il controllo o impazzire</td>
-        <td style="text-align:center"><input type="radio" name="mq3" value="1" data-t="meta_q" data-d="2" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq3" value="2" data-t="meta_q" data-d="2" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq3" value="3" data-t="meta_q" data-d="2" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq3" value="4" data-t="meta_q" data-d="2" class="meta-radio"></td></tr>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq3" value="1" data-t="meta_q" data-d="2" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq3" value="2" data-t="meta_q" data-d="2" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq3" value="3" data-t="meta_q" data-d="2" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq3" value="4" data-t="meta_q" data-d="2" class="meta-radio"></label></td></tr>
       <tr><td>Devo controllare tutti i miei pensieri per stare bene</td>
-        <td style="text-align:center"><input type="radio" name="mq4" value="1" data-t="meta_q" data-d="3" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq4" value="2" data-t="meta_q" data-d="3" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq4" value="3" data-t="meta_q" data-d="3" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq4" value="4" data-t="meta_q" data-d="3" class="meta-radio"></td></tr>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq4" value="1" data-t="meta_q" data-d="3" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq4" value="2" data-t="meta_q" data-d="3" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq4" value="3" data-t="meta_q" data-d="3" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq4" value="4" data-t="meta_q" data-d="3" class="meta-radio"></label></td></tr>
       <tr><td>Rimuginare mi prepara ad affrontare le difficolt&agrave;</td>
-        <td style="text-align:center"><input type="radio" name="mq5" value="1" data-t="meta_q" data-d="4" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq5" value="2" data-t="meta_q" data-d="4" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq5" value="3" data-t="meta_q" data-d="4" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq5" value="4" data-t="meta_q" data-d="4" class="meta-radio"></td></tr>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq5" value="1" data-t="meta_q" data-d="4" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq5" value="2" data-t="meta_q" data-d="4" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq5" value="3" data-t="meta_q" data-d="4" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq5" value="4" data-t="meta_q" data-d="4" class="meta-radio"></label></td></tr>
       <tr><td>I miei pensieri negativi possono causare danni reali</td>
-        <td style="text-align:center"><input type="radio" name="mq6" value="1" data-t="meta_q" data-d="5" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq6" value="2" data-t="meta_q" data-d="5" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq6" value="3" data-t="meta_q" data-d="5" class="meta-radio"></td>
-        <td style="text-align:center"><input type="radio" name="mq6" value="4" data-t="meta_q" data-d="5" class="meta-radio"></td></tr>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq6" value="1" data-t="meta_q" data-d="5" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq6" value="2" data-t="meta_q" data-d="5" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq6" value="3" data-t="meta_q" data-d="5" class="meta-radio"></label></td>
+        <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq6" value="4" data-t="meta_q" data-d="5" class="meta-radio"></label></td></tr>
     </table>
     </div>
     <p style="font-size:13px;color:var(--text-secondary);margin-top:6px"><strong>Punteggio metacognitivo totale:</strong> <span id="metaScore" style="font-weight:700;font-size:16px;color:var(--primary)">—</span> / 24 &nbsp; (rifallo ogni 2 settimane; l'obiettivo &egrave; scendere sotto 12)</p>
@@ -1244,8 +1258,58 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   var timerSeconds = 300;
   var timerRunning = false;
   var timerTotalSeconds = 300;
+  var timerEndTime = 0; // timestamp (Date.now) in cui il timer deve scadere
+  var wakeLock = null;
+
+  // AudioContext creato (e sbloccato) da un gesto dell'utente: requisito iOS
+  // per poter suonare il beep a fine countdown.
+  var audioCtx = null;
+  function ensureAudio() {
+    if (audioCtx) return audioCtx;
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      audioCtx = new AC();
+      if (audioCtx.resume) audioCtx.resume();
+    } catch(e) { audioCtx = null; }
+    return audioCtx;
+  }
+  function playBeep() {
+    try {
+      var ctx = ensureAudio();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') ctx.resume();
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = 880;
+      gain.gain.value = 0.1;
+      osc.start();
+      osc.stop(ctx.currentTime + 0.15);
+    } catch(e) {}
+  }
+
+  // Wake Lock: tiene lo schermo acceso durante l'esercizio. Se non supportato,
+  // fallisce in silenzio e il countdown resta comunque corretto via timestamp.
+  function requestWakeLock() {
+    try {
+      if (wakeLock) return;
+      if (!navigator.wakeLock || !navigator.wakeLock.request) return;
+      navigator.wakeLock.request('screen').then(function(lock) {
+        wakeLock = lock;
+        lock.addEventListener('release', function() { wakeLock = null; });
+      }).catch(function() { wakeLock = null; });
+    } catch(e) { wakeLock = null; }
+  }
+  function releaseWakeLock() {
+    try {
+      if (wakeLock) { wakeLock.release(); wakeLock = null; }
+    } catch(e) { wakeLock = null; }
+  }
 
   function formatTime(sec) {
+    sec = Math.max(0, Math.ceil(sec));
     var m = Math.floor(sec / 60);
     var s = sec % 60;
     return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
@@ -1256,48 +1320,53 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   function startTimer() {
     if (timerSeconds <= 0) return;
     timerRunning = true;
+    timerEndTime = Date.now() + timerSeconds * 1000;
     timerStartBtn.style.display = 'none';
     timerPauseBtn.style.display = 'inline-block';
     timerStatus.textContent = 'In corso...';
     timerOverlay.classList.remove('timer-alert');
+    ensureAudio(); // sblocca l'audio su iOS dentro il gesto utente
+    requestWakeLock();
     timerInterval = setInterval(function() {
-      timerSeconds--;
-      updateTimerDisplay();
+      // Countdown basato sull'orologio reale: anche se la tab viene sospesa
+      // (schermo spento, app in background), al ritorno il residuo è giusto.
+      timerSeconds = (timerEndTime - Date.now()) / 1000;
       if (timerSeconds <= 0) {
+        timerSeconds = 0;
+        updateTimerDisplay();
         stopTimer();
         timerStatus.textContent = 'Completato! \uD83D\uDD14';
         timerOverlay.classList.add('timer-alert');
-        try {
-          var ctx = new (window.AudioContext || window.webkitAudioContext)();
-          var osc = ctx.createOscillator();
-          var gain = ctx.createGain();
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.frequency.value = 880;
-          gain.gain.value = 0.1;
-          osc.start();
-          osc.stop(ctx.currentTime + 0.15);
-        } catch(e) {}
+        playBeep();
         showToast('Timer completato!');
+        return;
       }
-    }, 1000);
+      updateTimerDisplay();
+    }, 250);
   }
 
   function pauseTimer() {
     timerRunning = false;
     clearInterval(timerInterval);
+    timerInterval = null;
+    timerSeconds = (timerEndTime - Date.now()) / 1000;
+    if (timerSeconds <= 0) timerSeconds = 0;
+    updateTimerDisplay();
     timerStartBtn.style.display = 'inline-block';
     timerPauseBtn.style.display = 'none';
     timerStartBtn.textContent = '\u25B6 Riprendi';
     timerStatus.textContent = 'In pausa';
+    releaseWakeLock();
   }
 
   function stopTimer() {
     timerRunning = false;
     clearInterval(timerInterval);
+    timerInterval = null;
     timerStartBtn.style.display = 'inline-block';
     timerPauseBtn.style.display = 'none';
     timerStartBtn.textContent = '\u25B6 Avvia';
+    releaseWakeLock();
   }
 
   function resetTimer() {
@@ -1307,6 +1376,24 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
     timerStatus.textContent = '';
     timerOverlay.classList.remove('timer-alert');
   }
+
+  // Se la tab torna visibile, ricalcola subito il residuo (senza aspettare il tick)
+  document.addEventListener('visibilitychange', function() {
+    if (!document.hidden && timerRunning) {
+      timerSeconds = (timerEndTime - Date.now()) / 1000;
+      if (timerSeconds <= 0) {
+        timerSeconds = 0;
+        updateTimerDisplay();
+        stopTimer();
+        timerStatus.textContent = 'Completato! \uD83D\uDD14';
+        timerOverlay.classList.add('timer-alert');
+        playBeep();
+        showToast('Timer completato!');
+      } else {
+        updateTimerDisplay();
+      }
+    }
+  });
 
   function openTimer(minutes, label) {
     var secs = (minutes || 5) * 60;
@@ -1330,12 +1417,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   timerStartBtn.addEventListener('click', function() {
     if (timerRunning) return;
-    if (timerStartBtn.textContent.indexOf('Riprendi') > -1) {
-      startTimer();
-      timerStartBtn.textContent = '\u25B6 Avvia';
-    } else {
-      startTimer();
-    }
+    startTimer();
+    timerStartBtn.textContent = '\u25B6 Avvia';
   });
 
   timerPauseBtn.addEventListener('click', pauseTimer);
@@ -1659,6 +1742,13 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   loadDiaryData();
   loadMetaQ();
   loadEx24();
+
+  // ─── Service Worker (offline) ───
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('sw.js').catch(function() {});
+    });
+  }
 })();
 </script>
 
