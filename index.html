@@ -2,7 +2,7 @@
 <html lang="it" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="description" content="27 esercizi MCT per il rimuginio. Dark mode, timer integrato.">
+<meta name="description" content="Guida pratica di auto-aiuto ispirata ai principi della Terapia Metacognitiva (MCT) per comprendere e gestire il rimuginio. Dark mode, timer integrato.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#08524f">
 <link rel="manifest" href="manifest.webmanifest">
@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="icon.svg">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<title>Esercizi per il Rimuginio &mdash; Guida pratica</title>
+<title>Gestire il Rimuginio &mdash; Guida pratica MCT</title>
 <style>
 /* ═══════════════════════════════════════
    RESET & BASE
@@ -252,6 +252,51 @@ tr:last-child td { border-bottom: none; }
 .timeline li:last-child { border-left-color: transparent; padding-bottom: 0; }
 .timeline li strong { color: var(--primary-dark); }
 
+
+/* ─── V3: CLINICAL SAFETY / TODAY / CALM UX ─── */
+.safety-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: var(--shadow);
+}
+.safety-card h3 { color: var(--accent); margin-bottom: 8px; }
+.safety-card ul { padding-left: 20px; margin: 8px 0; }
+.safety-card li { margin-bottom: 6px; }
+.today-card {
+  background: linear-gradient(135deg, var(--primary-light), var(--card-bg));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin: 0 0 28px;
+}
+.today-card h2 { color: var(--primary-dark); font-size: 20px; margin-bottom: 6px; }
+.today-card .today-label { color: var(--text-secondary); font-size: 13px; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
+.today-card .today-exercise { font-size: 18px; font-weight: 700; color: var(--primary); margin: 6px 0; }
+.today-card .today-meta { color: var(--text-secondary); font-size: 14px; }
+.today-card .today-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+.today-card button, .today-card a {
+  display:inline-flex; align-items:center; justify-content:center;
+  min-height:44px; padding:10px 16px; border-radius:10px;
+  border:1px solid var(--primary); font-weight:700; cursor:pointer;
+  font-family:var(--font); text-decoration:none;
+}
+.today-card .primary-action { background:var(--primary); color:#fff; }
+.today-card .secondary-action { background:var(--card-bg); color:var(--primary); }
+.progress-wrap { min-width: 96px; }
+.progress-wrap .progress-label { font-size: 10px; opacity: .7; display:block; line-height:1; margin-bottom:3px; }
+.progress-wrap .progress-text { font-size: 11px; }
+.timer-modal-overlay.show .timer-modal { outline: none; }
+@media (max-width: 600px) {
+  .today-card { padding: 16px; }
+  .today-card h2 { font-size: 18px; }
+  .progress-wrap { min-width: 82px; }
+  .progress-bar { width: 64px; }
+}
+
 /* ═══════════════════════════════════════
    FOOTER
    ═══════════════════════════════════════ */
@@ -361,9 +406,10 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   <button class="header-btn" id="timerBtn" aria-label="Apri timer" title="Timer esercizi">&#9200;</button>
   <button class="header-btn" id="focusBtn" aria-label="Modalita focus" title="Modalita focus">&#9641;</button>
   <button class="header-btn" id="themeBtn" aria-label="Cambia tema" title="Dark/Light mode">&#9788;</button>
-  <div class="progress-wrap">
-    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-    <span class="progress-text" id="progressText">0/27</span>
+  <div class="progress-wrap" aria-label="Progresso del percorso">
+    <span class="progress-label">Percorso</span>
+    <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Percorso completato"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">0 sessioni</span>
   </div>
 </header>
 
@@ -372,9 +418,9 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
 <!-- ═══ TIMER MODAL ═══ -->
 <div class="timer-modal-overlay" id="timerOverlay">
-  <div class="timer-modal" id="timerModal" role="dialog" aria-label="Timer esercizi">
+  <div class="timer-modal" id="timerModal" role="dialog" aria-modal="true" aria-labelledby="timerLabel" tabindex="-1">
     <div class="timer-label" id="timerLabel">Timer esercizio</div>
-    <div class="timer-display" id="timerDisplay">05:00</div>
+    <div class="timer-display" id="timerDisplay" role="timer" aria-live="off">05:00</div>
     <div class="timer-presets" id="timerPresets">
       <button data-minutes="1">1 min</button>
       <button data-minutes="3">3 min</button>
@@ -393,11 +439,12 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 </div>
 
 <!-- ═══ TOAST ═══ -->
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <!-- ═══ SIDEBAR ═══ -->
 <nav class="sidebar" id="sidebar">
   <a href="#intro" class="active">Introduzione</a>
+  <a href="#sicurezza">Quando fermarti / chiedere aiuto</a>
   <div class="part-label">Fondamenti</div>
   <a href="#psico">Capire il Rimuginio</a>
   <a href="#assessment">Questionario Metacognitivo</a>
@@ -434,7 +481,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   <a href="#ex26">26 &ndash; Diario Settimanale</a>
   <a href="#ex27">27 &ndash; Il Tuo Terapeuta Interiore</a>
   <div class="part-label">Progressione</div>
-  <a href="#prossimi-passi">Prossimi Passi</a>
+  <a href="#prossimi-passi">Percorso consigliato</a>
   <div class="sidebar-actions">
     <button id="exportBtn" aria-label="Esporta progressi">&#128229; Esporta progressi</button>
     <button id="importBtn" aria-label="Importa progressi">&#128228; Importa progressi</button>
@@ -451,8 +498,19 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 <!-- ───── INTRO ───── -->
 <section id="intro">
   <div class="hero">
-    <h1>Esercizi Pratici per Gestire il Rimuginio</h1>
-    <p>27 esercizi passo-passo basati sulla Terapia Metacognitiva (MCT). Fai un esercizio alla volta, con costanza. Non serve la perfezione.</p>
+    <h1>Gestire il Rimuginio</h1>
+    <p>Una guida pratica di auto-aiuto ispirata ai principi della Terapia Metacognitiva (MCT). Procedi un passo alla volta: non devi completare tutto e non devi farlo perfettamente.</p>
+  </div>
+
+  <div class="today-card" id="todayCard" aria-labelledby="todayTitle">
+    <div class="today-label">Il tuo passo di oggi</div>
+    <h2 id="todayTitle">Un esercizio alla volta</h2>
+    <div class="today-exercise" id="todayExercise">Esercizio 1 &mdash; ATT Base</div>
+    <div class="today-meta" id="todayMeta">15 minuti · inizia dalla prima pratica e fermati quando hai completato il tempo previsto.</div>
+    <div class="today-actions">
+      <a class="primary-action" id="todayGo" href="#ex1">Vai all&rsquo;esercizio</a>
+      <a class="secondary-action" href="#prossimi-passi">Vedi il percorso consigliato</a>
+    </div>
   </div>
 
   <div class="exercise">
@@ -465,6 +523,26 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
     </ul>
     <div class="note"><strong>Importante:</strong> Se segui un percorso con un terapeuta, parlane con lui prima di iniziare gli esercizi della Parte 4 (Esposizione).</div>
     <div class="note" style="margin-top:8px"><strong>Materiale di auto-aiuto:</strong> questa guida non sostituisce la terapia. Se il rimuginio interferisce con il lavoro, le relazioni o il sonno da più di 6 mesi, o se provi un forte disagio, consulta un professionista.</div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     SICUREZZA / TRIAGE
+     ═══════════════════════════════════════ -->
+<section id="sicurezza">
+  <h2 class="section-title">Quando fermarti o chiedere aiuto <span class="badge">SICUREZZA</span></h2>
+  <div class="safety-card">
+    <h3>Questa è una guida di auto-aiuto, non una terapia</h3>
+    <p>Gli esercizi sono presentati come pratica educativa ispirata alla MCT. Non sostituiscono una valutazione clinica, una diagnosi o un trattamento personalizzato.</p>
+    <ul>
+      <li>Se un esercizio aumenta molto il disagio o ti lascia più agitato del solito, fermati e valuta con calma se proseguirlo.</li>
+      <li>Gli esercizi della Parte 4 non sono un passaggio obbligatorio. Se hai un terapeuta, è preferibile concordarne l&rsquo;uso con lui/lei.</li>
+      <li>Non usare questa guida per ritardare cure, controlli sanitari, farmaci prescritti o verifiche di sicurezza necessarie.</li>
+      <li>Se il rimuginio interferisce in modo importante con sonno, lavoro, relazioni o vita quotidiana, considera un confronto con un professionista della salute mentale.</li>
+      <li>Se hai dubbi su un sintomo fisico o sulla tua sicurezza, rivolgiti ai servizi sanitari appropriati: gli esercizi psicologici non devono sostituire una valutazione medica.</li>
+    </ul>
+    <p><strong>Regola semplice:</strong> non devi dimostrare che un pensiero è falso, che l&rsquo;ansia deve scendere o che un esercizio deve funzionare. L&rsquo;obiettivo è imparare un modo diverso di rispondere al rimuginio.</p>
   </div>
 </section>
 
@@ -532,7 +610,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   <div class="exercise" id="assessment">
     <h3><span class="num">&#9679;</span> Mini-Questionario: Quanto Credi a Queste Idee?</h3>
-    <p>Rispondi ora, prima di iniziare gli esercizi. Poi rifallo ogni 2 settimane. I punteggi dovrebbero SCENDERE nel tempo &mdash; &egrave; il segno che le credenze metacognitive si stanno indebolendo.</p>
+    <p>Rispondi ora, prima di iniziare gli esercizi. Poi rifallo ogni 2 settimane. Usalo come indicatore orientativo. Non aspettarti un calo lineare: osserva soprattutto la tendenza nel tempo e quanto riesci a non seguire automaticamente il rimuginio.</p>
     <p style="font-size:14px;color:var(--text-secondary)">Scala: <strong>1</strong> = non ci credo affatto &nbsp;|&nbsp; <strong>2</strong> = ci credo un po' &nbsp;|&nbsp; <strong>3</strong> = ci credo abbastanza &nbsp;|&nbsp; <strong>4</strong> = ci credo moltissimo</p>
 
     <div class="table-wrap">
@@ -570,7 +648,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
         <td style="text-align:center"><label class="meta-radio-label"><input type="radio" name="mq6" value="4" data-t="meta_q" data-d="5" class="meta-radio"></label></td></tr>
     </table>
     </div>
-    <p style="font-size:13px;color:var(--text-secondary);margin-top:6px"><strong>Punteggio metacognitivo totale:</strong> <span id="metaScore" style="font-weight:700;font-size:16px;color:var(--primary)">—</span> / 24 &nbsp; (rifallo ogni 2 settimane; l'obiettivo &egrave; che il punteggio scenda nel tempo)</p>
+    <p style="font-size:13px;color:var(--text-secondary);margin-top:6px"><strong>Punteggio orientativo:</strong> <span id="metaScore" style="font-weight:700;font-size:16px;color:var(--primary)">—</span> / 24 &nbsp; (rifallo ogni 2 settimane; guarda la tendenza, non il singolo valore)</p>
     <div class="note" style="margin-top:8px"><strong>Nota:</strong> questo mini-questionario non &egrave; uno strumento validato: serve solo come promemoria personale. Per una misura affidabile delle credenze metacognitive (o del rimuginio), parlane con un professionista: esistono questionari validati come il MCQ-30 (Metacognitions Questionnaire) e il PSWQ (Penn State Worry Questionnaire).</div>
   </div>
 </section>
@@ -747,7 +825,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
       <li>Stessa preoccupazione. Per 30 secondi, permettiti di pensarla senza analizzarla.</li>
       <li>Lasciala l&igrave; come una radio in un&rsquo;altra stanza. La senti ma non le dai importanza.</li>
     </ol>
-    <div class="note"><strong>Cosa hai scoperto:</strong> La soppressione AUMENTA il pensiero. Il non-intervento lo indebolisce. Quando smetti di combattere un pensiero, lui perde potenza.</div>
+    <div class="note"><strong>Cosa hai scoperto:</strong> La soppressione può rendere un pensiero più persistente. Nel non-intervento non devi farlo sparire: lasci che sia presente senza alimentarlo con analisi, controllo o lotta.</div>
     <div class="chk-wrap">
       <input type="checkbox" id="chk7" data-key="ex7">
       <label for="chk7">Ho fatto questo test oggi</label>
@@ -865,7 +943,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
       <li>Dopo 24 ore, prima di cedere, valuta: &ldquo;è successo qualcosa di grave nel frattempo?&rdquo; Poi decidi se la rassicurazione serve ancora davvero.</li>
     </ol>
     <div class="note"><strong>Eccezioni reali:</strong> questo esercizio non si applica ai controlli sanitari prescritti, alle scadenze o alle verifiche di sicurezza. Vale solo per la rassicurazione ansiosa: quella che ripeti e che non cambia nulla.</div>
-    <div class="variants"><strong>Cosa aspettarti:</strong> il bisogno di rassicurazione aumenta nei primi 2&ndash;3 giorni, poi cala. Ogni rinvio riuscito è una prova che l&rsquo;ansia si riduce da sola, senza conferme.</div>
+    <div class="variants"><strong>Cosa aspettarti:</strong> il bisogno può aumentare all'inizio. Non devi aspettare che cali per considerare utile l'esercizio: il punto è fare esperienza del fatto che puoi scegliere se seguire o meno l'urgenza.</div>
     <div class="chk-wrap">
       <input type="checkbox" id="chk14" data-key="ex14">
       <label for="chk14">Ho rimandato una rassicurazione oggi</label>
@@ -933,9 +1011,9 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
       <li>Ti dici: &ldquo;Lo affronto alle [orario].&rdquo;</li>
       <li>Riporti l&rsquo;attenzione a quello che stai facendo.</li>
       <li>Aspetta 15 secondi. Solo 15.</li>
-      <li>Dopo 15 secondi, valuta l&rsquo;ansia da 0 a 10. Probabilmente e&rsquo; gi&agrave; calata.</li>
+      <li>Dopo 15 secondi, puoi valutare l&rsquo;ansia da 0 a 10. Può essere cambiata oppure no: il test non serve a ottenere un particolare livello di ansia.</li>
     </ol>
-    <div class="note"><strong>Perch&eacute; funziona:</strong> L&rsquo;urgenza e&rsquo; un&rsquo;emozione, non un fatto. Se non la segui, cala da sola in 15&ndash;30 secondi.</div>
+    <div class="note"><strong>Perché:</strong> l&rsquo;urgenza è un&rsquo;esperienza mentale, non un ordine che devi eseguire. Il punto è fare pratica nel rimandare, anche se l&rsquo;urgenza non cala subito.</div>
     <div class="chk-wrap">
       <input type="checkbox" id="chk16" data-key="ex16">
       <label for="chk16">Ho usato il Test dei 15 Secondi oggi</label>
@@ -948,7 +1026,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
     <p>Non rimanere fermo alla stessa modalit&agrave; per sempre.</p>
     <ul>
       <li><strong>Settimana 1:</strong> SCRIVI ogni preoccupazione sul block notes. Fai il worry period col notes davanti.</li>
-      <li><strong>Settimana 2:</strong> Prova il RINVIO MENTALE: etichetti mentalmente (&ldquo;E&rsquo; rimuginio&rdquo;) e rimandi SENZA scrivere. Questo dimostra che hai il controllo anche senza supporti fisici.</li>
+      <li><strong>Settimana 2:</strong> Prova il RINVIO MENTALE: etichetti mentalmente (&ldquo;E&rsquo; rimuginio&rdquo;) e rimandi SENZA scrivere. Serve a fare pratica nel rimandare senza affidarti sempre a un supporto esterno.</li>
       <li><strong>Dal mese 2:</strong> Il worry period ti serve sempre meno. Tienilo come &ldquo;rete di sicurezza&rdquo; per le giornate no.</li>
     </ul>
     <div class="chk-wrap">
@@ -978,7 +1056,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
       <li>Nota: sei riuscito a smettere? Il pensiero si &egrave; fermato?</li>
       <li>Rivaluta la predizione: &ldquo;quanto ci credo ORA?&rdquo; (0&ndash;10). Il confronto tra prima e dopo &egrave; il risultato dell&rsquo;esercizio.</li>
     </ol>
-    <p><strong>Cosa scoprirai:</strong> dopo 3&ndash;4 minuti la tua mente smette da sola di rimuginare intensamente. Sei riuscito a smettere quando hai deciso. Il rimuginio non &egrave; fuori controllo: &egrave; un&rsquo;abitudine che INIZI senza accorgertene.</p>
+    <p><strong>Cosa osservare:</strong> nota se riesci a interrompere il rimuginio quando decidi di farlo e cosa rende più facile o più difficile il passaggio a un&rsquo;altra attività. Non aspettarti che il pensiero sparisca immediatamente: l&rsquo;apprendimento riguarda il tuo rapporto con il processo, non la sua scomparsa.</p>
     <div class="note"><strong>Se la predizione non cambia:</strong> pu&ograve; capitare che la credenza resti alta anche dopo il test. Non significa che l&rsquo;esercizio non funziona: significa che va ripetuto, e idealmente discusso con un terapeuta. Una singola prova che &ldquo;fallisce&rdquo; pu&ograve; rinforzare la credenza &mdash; per questo la Parte 4 funziona al meglio dentro un percorso.</div>
     <div class="chk-wrap">
       <input type="checkbox" id="chk18" data-key="ex18">
@@ -987,24 +1065,26 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   </div>
 
   <div class="exercise" id="ex19">
-    <h3><span class="num">Esercizio 19</span> Test &ldquo;Posso Impazzire?&rdquo; <button class="timer-tag" data-time="600" data-label="Test Impazzire 10 min">&#9200; 10 min</button></h3>
-    <div class="meta"><span>&#9200; Versione graduale: 2 min &rarr; 5 min &rarr; 10 min</span><span>&#128259; Una volta, poi se necessario</span></div>
+    <h3><span class="num">Esercizio 19</span> Esperimento sulla paura di perdere il controllo <button class="timer-tag" data-time="600" data-label="Esperimento 10 min">&#9200; 10 min</button></h3>
+    <div class="meta"><span>&#9200; Versione graduale: 2 min &rarr; 5 min &rarr; 10 min</span><span>&#128259; Solo se appropriato per te</span></div>
 
-    <div class="note"><strong>&#9888; ATTENZIONE:</strong> Questo &egrave; l'esercizio pi&ugrave; intenso del percorso. NON farlo se oggi sei gi&agrave; in uno stato di ansia acuta o panico. Non farlo mai prima di dormire. Se senti che l'ansia sale oltre la tua soglia di sopportazione durante l'esercizio, interrompi SUBITO e fai 3 minuti di ATT Breve (Esercizio 2). Poi riparla col tuo terapeuta prima di riprovare. Se stai seguendo un percorso terapeutico, parlane con lui prima di iniziare questa parte. <strong>Segnali per fermarsi e parlare col terapeuta:</strong> se dopo le sessioni l'ansia non torna ai livelli di partenza entro 24 ore, se l'insonnia dura pi&ugrave; di 3 notti, o se il tono dell'umore peggiora.</div>
+    <div class="note"><strong>&#9888; Prima di iniziare:</strong> questo è uno degli esercizi più intensi del percorso. Non è obbligatorio e non va usato per "testare fino a che punto resisti". Se hai un terapeuta, concordalo con lui/lei. Evitalo se sei in una fase di forte instabilità o se gli esercizi precedenti ti hanno lasciato molto agitato. Se il disagio diventa eccessivo, interrompi l&rsquo;esperimento: fermarsi non significa aver fallito.</div>
 
-    <p><strong>Testa la credenza: &ldquo;Rimuginare mi far&agrave; perdere la ragione&rdquo;</strong></p>
+    <p><strong>Obiettivo:</strong> osservare la credenza &ldquo;se rimugino intensamente, potrei perdere il controllo&rdquo; senza cercare una rassicurazione preventiva.</p>
 
-    <h4 style="color:var(--primary);margin:12px 0 4px">Versione Graduale (consigliata)</h4>
-    <ul>
-      <li><strong>Sessione 1 (2 minuti):</strong> Timer 2 min. Scegli UNA preoccupazione media. Rimugina attivamente. Dopo 2 min, fermati. Valuta l'ansia da 0 a 10. Ti senti ancora in controllo? Se s&igrave;, passa alla sessione 2.</li>
-      <li><strong>Sessione 2 (5 minuti):</strong> Timer 5 min. Usa la preoccupazione peggiore. Cerca di amplificarla. Dopo 5 min, fermati. Ansia post-esercizio?</li>
-      <li><strong>Sessione 3 (10 minuti):</strong> Solo se le prime due sono andate bene. Timer 10 min. Rimugina con l'intenzione di farti venire il panico. Cerca attivamente di perdere il controllo.</li>
-    </ul>
+    <h4 style="color:var(--primary);margin:12px 0 4px">Versione graduale</h4>
+    <ol>
+      <li>Scrivi prima la previsione: &ldquo;Quanto penso che rimuginare intensamente possa farmi perdere il controllo?&rdquo; (0&ndash;10).</li>
+      <li><strong>Sessione 1 (2 minuti):</strong> scegli una preoccupazione moderatamente attivante e lascia che il rimuginio sia presente senza cercare di renderlo più intenso.</li>
+      <li>Quando il timer finisce, interrompi l&rsquo;esercizio e osserva: cosa è successo alla tua attenzione? Hai potuto scegliere cosa fare dopo?</li>
+      <li>Ripeti solo se la prima prova è stata gestibile. Se appropriato, passa a 5 minuti e poi, in un&rsquo;altra occasione, a 10 minuti.</li>
+      <li>Confronta la previsione iniziale con ciò che hai osservato. Non chiederti &ldquo;sono riuscito a dimostrare che non succederà mai?&rdquo;, ma &ldquo;che cosa ho imparato da questa prova?&rdquo;.</li>
+    </ol>
 
-    <p><strong>Domande dopo ogni sessione:</strong> Hai perso il controllo? Sei impazzito? La risposta &egrave; sempre no. La credenza &ldquo;rimuginare mi far&agrave; impazzire&rdquo; &egrave; una paura appresa, non un fatto. Ogni sessione completata &egrave; una prova concreta che la tua mente pu&ograve; rimuginare intensamente e poi tornare alla normalit&agrave;.</p>
+    <div class="variants"><strong>Importante:</strong> l&rsquo;esperimento non deve diventare una gara a sopportare l&rsquo;ansia né una ricerca di certezza sul fatto che "non impazzirai". Se ti accorgi che stai controllando continuamente i sintomi per verificare se sei al sicuro, torna a un esercizio più semplice o parlane con un professionista.</div>
     <div class="chk-wrap">
       <input type="checkbox" id="chk19" data-key="ex19">
-      <label for="chk19">Ho fatto questo test oggi</label>
+      <label for="chk19">Ho fatto questo esperimento oggi</label>
     </div>
   </div>
 
@@ -1012,11 +1092,11 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
     <h3><span class="num">Esercizio 20</span> Rimuginio Programmato a Casa <button class="timer-tag" data-time="600" data-label="Rimuginio Programmato 10 min">&#9200; 10 min</button></h3>
     <div class="meta"><span>&#9200; 10 minuti &times; 3 volte</span><span>&#128259; In una settimana</span></div>
     <ol>
-      <li>Scegli 3 momenti della settimana per rimuginare INTENZIONALMENTE.</li>
+      <li>Scegli, se questo esperimento è appropriato per te, fino a 3 momenti della settimana per osservare intenzionalmente il rimuginio.</li>
       <li>Ogni sessione dura 10 minuti esatti (timer!).</li>
       <li>Segna su un foglio: data, tema, ansia PRIMA (0&ndash;10), ansia DOPO (0&ndash;10), quanto controllo hai avuto nello smettere (0&ndash;10).</li>
     </ol>
-    <p><strong>Cosa stai testando:</strong> &ldquo;Se posso INIZIARE il rimuginio quando voglio, posso anche SMETTERE quando voglio.&rdquo; La differenza &egrave; tra subire passivamente e scegliere attivamente.</p>
+    <p><strong>Cosa stai osservando:</strong> la differenza tra entrare automaticamente nel rimuginio e scegliere intenzionalmente quando dedicargli attenzione. Non è una prova che puoi controllare ogni pensiero in ogni momento.</p>
     <div class="variants"><strong>Relazione con l&rsquo;Es. 18:</strong> questo esercizio è la versione sistematica dello stesso esperimento: l&rsquo;Es. 18 è il test singolo, l&rsquo;Es. 20 è la ripetizione programmata per consolidare l&rsquo;apprendimento. Non sono tecniche diverse.</div>
     <div class="chk-wrap">
       <input type="checkbox" id="chk20" data-key="ex20">
@@ -1039,14 +1119,14 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
     <div class="variants">
       <strong>Tempo rimuginio (0&ndash;10):</strong><br>
       0 = 0 minuti oggi &nbsp;|&nbsp; 2 = &lt;15 minuti &nbsp;|&nbsp; 4 = 30&ndash;60 minuti &nbsp;|&nbsp; 6 = 2&ndash;3 ore &nbsp;|&nbsp; 8 = 4&ndash;6 ore &nbsp;|&nbsp; 10 = tutto il giorno, impossibile staccare<br><br>
-      <strong>Controllo attenzione (0&ndash;10):</strong><br>
-      0 = non riesco a concentrarmi su niente, la mente va dove vuole &nbsp;|&nbsp; 3 = fatico ma ogni tanto riesco a riportare l'attenzione &nbsp;|&nbsp; 5 = met&agrave; del tempo controllo, met&agrave; no &nbsp;|&nbsp; 7 = buon controllo, sporadiche intrusioni &nbsp;|&nbsp; 10 = controllo totale, riesco a spostare l'attenzione quando voglio<br><br>
-      <strong>Strategie di coping (0&ndash;10):</strong><br>
-      0 = non ho usato nessuna strategia oggi, solo rimuginio &nbsp;|&nbsp; 3 = ho provato 1&ndash;2 volte ma senza successo &nbsp;|&nbsp; 5 = ho usato strategie in 2&ndash;3 momenti con risultato parziale &nbsp;|&nbsp; 7 = ho usato ATT/WP/DM in modo efficace per la maggior parte della giornata &nbsp;|&nbsp; 10 = ho gestito ogni episodio con le strategie, rimuginio quasi assente
+      <strong>Flessibilità attentiva (0&ndash;10):</strong><br>
+      0 = faccio molta fatica a spostare l&rsquo;attenzione &nbsp;|&nbsp; 3 = ci riesco occasionalmente &nbsp;|&nbsp; 5 = ci riesco in parte &nbsp;|&nbsp; 7 = generalmente riesco a tornare al compito &nbsp;|&nbsp; 10 = riesco a scegliere dove dirigere l&rsquo;attenzione senza dover eliminare i pensieri<br><br>
+      <strong>Uso flessibile delle strategie (0&ndash;10):</strong><br>
+      0 = seguo automaticamente il rimuginio &nbsp;|&nbsp; 3 = noto l&rsquo;automatismo solo dopo molto tempo &nbsp;|&nbsp; 5 = a volte riesco a scegliere una risposta diversa &nbsp;|&nbsp; 7 = scelgo abbastanza spesso se usare ATT, DM o WP &nbsp;|&nbsp; 10 = scelgo in modo flessibile senza trasformare le strategie in obblighi o rituali
     </div>
     <div class="table-wrap">
     <table>
-      <tr><th>Giorno</th><th>1. Tempo rimuginio</th><th>2. Controllo attenzione</th><th>3. Strategie di coping</th></tr>
+      <tr><th>Giorno</th><th>1. Tempo rimuginio</th><th>2. Flessibilità attentiva</th><th>3. Uso flessibile delle strategie</th></tr>
       <tr><td>Luned&igrave;</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex21" data-d="0" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex21" data-d="0" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex21" data-d="0" data-c="2"></td></tr>
       <tr><td>Marted&igrave;</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex21" data-d="1" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex21" data-d="1" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex21" data-d="1" data-c="2"></td></tr>
       <tr><td>Mercoled&igrave;</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex21" data-d="2" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex21" data-d="2" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex21" data-d="2" data-c="2"></td></tr>
@@ -1056,7 +1136,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
       <tr><td>Domenica</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex21" data-d="6" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex21" data-d="6" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex21" data-d="6" data-c="2"></td></tr>
     </table>
     </div>
-    <p style="font-size:14px;color:var(--text-secondary);margin-top:8px"><strong>Obiettivo:</strong> 1 &darr; (sotto 3/10), 2 &uarr; (sopra 7/10), 3 &darr; (sotto 2/10) dopo 6&ndash;8 settimane.</p>
+    <p style="font-size:14px;color:var(--text-secondary);margin-top:8px"><strong>Uso:</strong> non è una pagella. Guarda l&rsquo;andamento nel tempo e soprattutto se riesci a rispondere al rimuginio con maggiore flessibilità.</p>
     <div class="chk-wrap">
       <input type="checkbox" id="chk21" data-key="ex21">
       <label for="chk21">Ho compilato la valutazione oggi</label>
@@ -1092,7 +1172,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
       <tr><td>Ricevo una critica al lavoro</td><td>Noto il pensiero &rarr; etichetta &rarr; ATT 1 min &rarr; rimando a WP</td></tr>
       <tr><td>Litigo con il partner</td><td>Respiro &rarr; &ldquo;E&rsquo; un evento mentale&rdquo; &rarr; aspetto 15 min prima di analizzare</td></tr>
       <tr><td>Scadenza importante</td><td>Distinguo: agire o preoccuparmi? Se azione, faccio; se no, rimando</td></tr>
-      <tr><td>Sento un sintomo fisico</td><td>Noto la preoccupazione &rarr; ATT 1 min &rarr; aspetto 24 ore prima di agire</td></tr>
+      <tr><td>Sento un sintomo fisico</td><td>Distinguo preoccupazione da necessità di cura. Non uso l&rsquo;ATT per ritardare una valutazione: se il sintomo richiede attenzione, seguo le indicazioni sanitarie appropriate.</td></tr>
       <tr><td>Non riesco a dormire</td><td>Mi alzo &rarr; scrivo le preoccupazioni &rarr; ATT &rarr; riprovo dopo 20 min</td></tr>
       <tr><td>Evento sociale imminente</td><td>DM: &ldquo;La mente produce scenari. Sono solo pensieri.&rdquo; &rarr; WP alle 17:00</td></tr>
       <tr><td>Mi sento giudicato</td><td>&ldquo;La mente dice X. E&rsquo; solo un pensiero.&rdquo; &rarr; ATT &rarr; rientro in quello che facevo</td></tr>
@@ -1155,7 +1235,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
       <tr><td>Settimana 8</td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex26" data-d="7" data-c="0"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex26" data-d="7" data-c="1"></td><td><input type="number" min="0" max="10" class="diary-input" data-t="ex26" data-d="7" data-c="2"></td></tr>
     </table>
     </div>
-    <p style="font-size:14px;color:var(--text-secondary);margin-top:8px">Tienilo per almeno 8 settimane. I numeri miglioreranno gradualmente.</p>
+    <p style="font-size:14px;color:var(--text-secondary);margin-top:8px">Tienilo per almeno 8 settimane. Usa i numeri per osservare l'andamento, non come un voto da raggiungere.</p>
     <div class="chk-wrap">
       <input type="checkbox" id="chk26" data-key="ex26">
       <label for="chk26">Ho aggiornato il diario settimanale</label>
@@ -1163,9 +1243,9 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   </div>
 
   <div class="exercise" id="ex27">
-    <h3><span class="num">Esercizio 27</span> Il Tuo Terapeuta Interiore</h3>
+    <h3><span class="num">Esercizio 27</span> Il Tuo Coach Metacognitivo</h3>
     <div class="meta"><span>&#9200; 5&ndash;10 minuti</span><span>&#128259; Dopo aver imparato tutte le tecniche</span></div>
-    <p>Immagina che un amico abbia il tuo stesso problema e ti chieda aiuto. Come rispondi?</p>
+    <p>Immagina che un amico abbia il tuo stesso problema e ti chieda aiuto. Come risponderesti senza rassicurarlo, senza promettere certezza e senza alimentare il controllo?</p>
     <div class="table-wrap">
     <table>
       <tr><th>Il tuo amico dice&hellip;</th><th>Tu rispondi</th></tr>
@@ -1175,7 +1255,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
       <tr><td>&ldquo;Ho provato ma non funziona&rdquo;</td><td><textarea class="ex24-ta" placeholder="Scrivi la tua risposta..." data-t="ex27" data-d="3"></textarea></td></tr>
     </table>
     </div>
-    <p style="font-size:14px;color:var(--text-secondary);margin-top:8px">Se sai rispondere a queste domande, sei pronto a essere il terapeuta di te stesso.</p>
+    <p style="font-size:14px;color:var(--text-secondary);margin-top:8px">Le tue risposte possono diventare un promemoria personale. Non sostituiscono il lavoro con un professionista quando serve.</p>
     <div class="chk-wrap">
       <input type="checkbox" id="chk27" data-key="ex27">
       <label for="chk27">Ho fatto questo esercizio oggi</label>
@@ -1188,22 +1268,22 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
      ═══════════════════════════════════════ -->
 <section id="prossimi-passi">
   <h2 class="section-title">Prossimi Passi</h2>
-  <p style="margin-bottom:16px;color:var(--text-secondary)">Non devi fare tutti gli esercizi in una volta. Segui questa progressione:</p>
+  <p style="margin-bottom:16px;color:var(--text-secondary)">Non devi fare tutti gli esercizi in una volta. La progressione è un orientamento, non un esame: se un passaggio non è adatto a te, fermati e valuta un percorso diverso.</p>
   <ul class="timeline">
-    <li data-week="1"><strong>Settimane 1&ndash;2:</strong> solo Esercizi 1&ndash;4 (ATT base). Nient&rsquo;altro. Due volte al giorno, tutti i giorni.</li>
-    <li data-week="3"><strong>Settimane 3&ndash;4:</strong> aggiungi Esercizi 5&ndash;11 (Detached Mindfulness). Continua ATT.</li>
-    <li data-week="5"><strong>Settimane 5&ndash;6:</strong> aggiungi Esercizi 12&ndash;14 (ATT nel compito, Monitoraggio minacce, Rinvio rassicurazione). Continua ATT + DM.</li>
-    <li data-week="7"><strong>Settimane 7&ndash;8:</strong> aggiungi Esercizi 15&ndash;17 (Worry Postponement). Continua ATT + DM.</li>
-    <li data-week="9"><strong>Settimane 9&ndash;10:</strong> aggiungi Esercizi 18&ndash;20 (Esposizione), SOLO se ti senti pronto.</li>
-    <li data-week="11+"><strong>Dal mese 3:</strong> Esercizi 21&ndash;27 (Mantenimento) per non ricadere.</li>
+    <li data-week="1"><strong>Settimane 1&ndash;2:</strong> familiarizza con Esercizi 1&ndash;4 (ATT). Una pratica regolare è più importante del numero perfetto di sessioni.</li>
+    <li data-week="3"><strong>Settimane 3&ndash;4:</strong> se l&rsquo;ATT è diventato familiare, aggiungi alcuni esercizi 5&ndash;11 (Detached Mindfulness). Mantieni l&rsquo;ATT come pratica di base.</li>
+    <li data-week="5"><strong>Settimane 5&ndash;6:</strong> puoi introdurre Esercizi 12&ndash;14. Scegli quelli più pertinenti al tuo pattern di rimuginio.</li>
+    <li data-week="7"><strong>Settimane 7&ndash;8:</strong> se il rinvio è appropriato per te, prova Esercizi 15&ndash;17 (Worry Postponement).</li>
+    <li data-week="9"><strong>Settimane 9&ndash;10:</strong> Esercizi 18&ndash;20 sono esperimenti più intensi: non sono obbligatori e, se hai un terapeuta, è preferibile concordarli con lui/lei.</li>
+    <li data-week="11+"><strong>Dal mese 3:</strong> usa Esercizi 21&ndash;27 come strumenti di mantenimento e riflessione, senza trasformarli in controlli quotidiani obbligatori.</li>
   </ul>
-  <div class="note" style="margin-top:16px"><strong>Ricorda:</strong> Non serve essere perfetti. Serve provare con costanza. Ogni volta che fai un esercizio, il tuo cervello impara un po&rsquo; di pi&ugrave;.</div>
+  <div class="note" style="margin-top:16px"><strong>Ricorda:</strong> Non serve essere perfetti. Serve provare con costanza. L'obiettivo è fare esperienza del processo, non eseguire tutto perfettamente.</div>
 </section>
 
 <footer>
   <p>Basato sulla Terapia Metacognitiva (MCT) &mdash; Wells, 2009</p>
-  <p>Esercizi tratti dal protocollo clinico MCT per il rimuginio</p>
-  <p>Versione 2 &mdash; ampliata e riveduta</p>
+  <p>Materiale educativo di auto-aiuto ispirato ai principi della MCT; non sostituisce un protocollo clinico personalizzato</p>
+  <p>Versione 3 &mdash; revisione UX, sicurezza e accessibilit&agrave;</p>
 </footer>
 
 </main>
@@ -1398,6 +1478,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
     timerEndTime = Date.now() + timerSeconds * 1000;
     timerStartBtn.style.display = 'none';
     timerPauseBtn.style.display = 'inline-block';
+    timerStatus.setAttribute('aria-live', 'off');
     timerStatus.textContent = 'In corso...';
     timerOverlay.classList.remove('timer-alert');
     ensureAudio(); // sblocca l'audio su iOS dentro il gesto utente
@@ -1470,7 +1551,10 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
     }
   });
 
+  var timerLastFocus = null;
+
   function openTimer(minutes, label) {
+    timerLastFocus = document.activeElement;
     var secs = (minutes || 5) * 60;
     timerTotalSeconds = secs;
     timerSeconds = secs;
@@ -1480,6 +1564,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
     timerOverlay.classList.add('show');
     timerOverlay.classList.remove('timer-alert');
     stopTimer();
+    setTimeout(function() { timerModal.focus(); }, 0);
     timerPresets.querySelectorAll('button').forEach(function(b) {
       b.classList.toggle('active', parseInt(b.getAttribute('data-minutes')) === (minutes || 5));
     });
@@ -1488,6 +1573,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   function closeTimer() {
     stopTimer();
     timerOverlay.classList.remove('show');
+    if (timerLastFocus && typeof timerLastFocus.focus === 'function') { timerLastFocus.focus(); }
   }
 
   timerStartBtn.addEventListener('click', function() {
@@ -1530,6 +1616,15 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
       var label = tag.getAttribute('data-label');
       openTimer(Math.round(secs / 60), label);
     });
+  });
+
+  timerModal.addEventListener('keydown', function(e) {
+    if (e.key !== 'Tab') return;
+    var focusables = timerModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (!focusables.length) return;
+    var first = focusables[0], last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
 
   // ESC to close timer
@@ -1613,17 +1708,52 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
       if (ex) ex.classList.toggle('done', cb.checked);
     });
     var pct = total > 0 ? Math.round((done / total) * 100) : 0;
-    document.getElementById('progressFill').style.width = pct + '%';
-    document.getElementById('progressText').textContent = done + '/' + total;
+    var fill = document.getElementById('progressFill');
+    var bar = fill ? fill.parentElement : null;
+    if (fill) fill.style.width = pct + '%';
+    if (bar) bar.setAttribute('aria-valuenow', String(pct));
+    document.getElementById('progressText').textContent = done + (done === 1 ? ' sessione' : ' sessioni');
+    updateTodayCard();
   }
 
   checkboxes.forEach(function(cb) {
     cb.addEventListener('change', saveProgress);
   });
 
+  // ─── V3: Today / next-step card ───
+  function updateTodayCard() {
+    var card = document.getElementById('todayCard');
+    var title = document.getElementById('todayExercise');
+    var meta = document.getElementById('todayMeta');
+    var go = document.getElementById('todayGo');
+    if (!card || !title || !meta || !go) return;
+
+    var firstOpen = null;
+    for (var i = 0; i < checkboxes.length; i++) {
+      if (!checkboxes[i].checked) { firstOpen = checkboxes[i]; break; }
+    }
+    if (!firstOpen) {
+      title.textContent = 'Hai esplorato tutti i passaggi';
+      meta.textContent = 'Non serve aggiungere altri compiti: puoi tornare agli esercizi utili e usarli con flessibilità.';
+      go.textContent = 'Torna al percorso';
+      go.href = '#prossimi-passi';
+      return;
+    }
+    var ex = firstOpen.closest('.exercise');
+    if (!ex) return;
+    var num = ex.querySelector('.num');
+    var h3 = ex.querySelector('h3');
+    var metaEl = ex.querySelector('.meta');
+    var label = (num ? num.textContent.trim() + ' — ' : '') + (h3 ? h3.textContent.replace(/Esercizio\s*\d+\s*/i,'').replace(/\s*⏱.*$/,'').trim() : 'prossimo esercizio');
+    title.textContent = label;
+    meta.textContent = metaEl ? metaEl.textContent.trim().replace(/\s+/g,' ') : 'Procedi con calma e fermati se l\'esercizio non è adatto a te.';
+    go.textContent = 'Vai all’esercizio';
+    go.href = '#' + ex.id;
+  }
+
   // ─── Reset ───
   document.getElementById('resetBtn').addEventListener('click', function() {
-    if (confirm('Resettare tutti i progressi? Questa azione non puo essere annullata.')) {
+    if (confirm('Azzerare i dati salvati di questa guida? Questa azione non può essere annullata.')) {
       try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(DIARY_KEY); localStorage.removeItem(META_KEY); localStorage.removeItem(EX24_KEY); } catch(e) {}
       checkboxes.forEach(function(cb) { cb.checked = false; });
       document.querySelectorAll('.diary-input').forEach(function(i) { i.value = ''; });
@@ -1825,7 +1955,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
     var scoreEl = document.getElementById('metaScore');
     if (scoreEl) {
       scoreEl.textContent = (answered === 6) ? total : (answered > 0 ? total + ' (incompleto)' : '\u2014');
-      scoreEl.style.color = (answered === 6 && total <= 12) ? 'var(--success)' : 'var(--primary)';
+      scoreEl.style.color = 'var(--primary)';
     }
   }
 
@@ -1863,11 +1993,12 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   loadDiaryData();
   loadMetaQ();
   loadEx24();
+  updateTodayCard();
 
   // ─── Service Worker (offline) ───
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
-      navigator.serviceWorker.register('sw.js').catch(function() {});
+      navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(function() {});
     });
   }
 })();

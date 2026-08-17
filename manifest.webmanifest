@@ -1,7 +1,7 @@
 {
-  "name": "Esercizi per il Rimuginio",
+  "name": "Gestire il Rimuginio",
   "short_name": "Rimuginio",
-  "description": "27 esercizi MCT per il rimuginio. Dark mode, timer integrato.",
+  "description": "Guida pratica di auto-aiuto ispirata ai principi della Terapia Metacognitiva (MCT).",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
