@@ -1,8 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="description" content="Guida pratica di auto-aiuto ispirata ai principi della Terapia Metacognitiva (MCT) per comprendere e gestire il rimuginio. Dark mode, timer integrato.">
+<meta name="app-version" content="mct-v7">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#08524f">
 <link rel="manifest" href="manifest.webmanifest">
@@ -253,7 +254,7 @@ tr:last-child td { border-bottom: none; }
 .timeline li strong { color: var(--primary-dark); }
 
 
-/* ─── V3: CLINICAL SAFETY / TODAY / CALM UX ─── */
+/* ─── V7: CLINICAL SAFETY / TODAY / CALM UX ─── */
 .safety-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
@@ -515,6 +516,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   <div class="exercise">
     <h3><span class="num">&#9679;</span> Come usare questa guida</h3>
+    <div class="note anti-ritual-note"><strong>Anti-rituale:</strong> esercizi, caselle, timer, punteggi e diari sono strumenti, non obiettivi. Non devi completarli perfettamente, tutti i giorni, né controllare continuamente se li stai usando “bene”. Se il monitoraggio del percorso diventa una nuova fonte di preoccupazione o controllo, riducilo e torna alle pratiche essenziali.</div>
     <ul>
       <li>Leggi un esercizio alla volta. Non saltare da uno all&rsquo;altro.</li>
       <li>Prova ogni esercizio almeno 3&ndash;4 volte prima di decidere se ti serve.</li>
@@ -533,6 +535,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 <section id="sicurezza">
   <h2 class="section-title">Quando fermarti o chiedere aiuto <span class="badge">SICUREZZA</span></h2>
   <div class="safety-card">
+    <p><strong>Privacy:</strong> dati, progressi e annotazioni restano nel browser su questo dispositivo; non vengono inviati a un server. Su un dispositivo condiviso, altre persone che usano lo stesso profilo/browser potrebbero comunque accedere ai dati locali.</p>
+    <p><strong>Export:</strong> il file JSON esportato può contenere informazioni personali o sensibili. Conservalo e condividilo con la stessa attenzione che useresti per un documento personale.</p>
     <h3>Questa è una guida di auto-aiuto, non una terapia</h3>
     <p>Gli esercizi sono presentati come pratica educativa ispirata alla MCT. Non sostituiscono una valutazione clinica, una diagnosi o un trattamento personalizzato.</p>
     <ul>
@@ -658,14 +662,14 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
      ═══════════════════════════════════════ -->
 <section>
   <h2 class="section-title">Parte 1 <span class="badge">ATT</span> &mdash; L&rsquo;Allenamento Attentivo</h2>
-  <p style="margin-bottom:16px;color:var(--text-secondary)">Questi esercizi allenano la tua attenzione a spostarsi via dalla preoccupazione. Come in palestra: risultati dopo 4&ndash;6 settimane di pratica costante, non dopo 2 giorni.</p>
+  <p style="margin-bottom:16px;color:var(--text-secondary)">Questi esercizi allenano la tua attenzione a spostarsi via dalla preoccupazione. L&rsquo;ATT (Attention Training Technique) &egrave; una tecnica attentiva usata in alcuni percorsi MCT e in altri contesti clinici: pu&ograve; essere utile come allenamento dell&rsquo;attenzione, ma non &egrave; un passaggio obbligatorio n&eacute; deve essere trattata come una cura in s&eacute;. La pratica va adattata al proprio percorso.</p>
 
   <div class="exercise" id="ex1">
     <h3><span class="num">Esercizio 1</span> L&rsquo;ATT Base &mdash; 3 Fasi <button class="timer-tag" data-time="900" data-label="ATT Base 15 min">&#9200; 15 min</button></h3>
     <div class="meta">
       <span>&#9200; 12&ndash;15 minuti</span>
-      <span>&#128259; 2 volte al giorno (mattina e sera)</span>
-      <span>&#128197; Per 6 settimane</span>
+      <span>&#128259; Frequenza regolare, compatibile con il tuo percorso</span>
+      <span>&#128197; Periodo di pratica indicativo</span>
     </div>
     <p><strong>Obiettivo:</strong> imparare a spostare l&rsquo;attenzione <em>nonostante</em> l&rsquo;ansia. Non serve a calmarti.</p>
 
@@ -718,7 +722,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
       <li>90 secondi: alterna suoni velocemente (ogni 5&ndash;7 secondi).</li>
       <li>60 secondi: ascolta tutto insieme, senza focalizzare niente.</li>
     </ol>
-    <p style="font-size:14px;color:var(--text-secondary)">Si fa anche in ufficio, in macchina (a occhi aperti), o prima di una riunione.</p>
+    <p style="font-size:14px;color:var(--text-secondary)"><strong>Pu&ograve; essere praticato in contesti quotidiani in cui puoi mantenere piena attenzione all&rsquo;ambiente.</strong> Non praticarlo mentre guidi o svolgi attivit&agrave; che richiedono attenzione continua alla sicurezza.</p>
     <div class="chk-wrap">
       <input type="checkbox" id="chk2" data-key="ex2">
       <label for="chk2">Ho fatto questo esercizio oggi</label>
@@ -726,8 +730,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   </div>
 
   <div class="exercise" id="ex3">
-    <h3><span class="num">Esercizio 3</span> ATT con gli Occhi Aperti</h3>
-    <div class="meta"><span>Variante per quando non puoi chiudere gli occhi</span></div>
+    <h3><span class="num">Esercizio 3</span> Allenamento della Flessibilità Attentiva a Occhi Aperti</h3>
+    <div class="meta"><span>Variante di allenamento attentivo per quando non puoi chiudere gli occhi</span></div>
     <ol>
       <li>Tieni gli occhi aperti e fissa un punto sulla parete.</li>
       <li>Invece dei suoni, usa la VISTA: scegli un oggetto (angolo del quadro, macchia sul muro). Focalizzati SOLO su quello.</li>
@@ -1041,7 +1045,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
      ═══════════════════════════════════════ -->
 <section>
   <h2 class="section-title">Parte 4 <span class="badge">EXP</span> &mdash; Testare le Tue Paure sul Rimuginio</h2>
-  <p style="margin-bottom:16px;color:var(--text-secondary)">Fai questi esercizi SOLO dopo almeno 4 settimane di ATT e DM. Servono a testare concretamente le tue paure: &ldquo;Non riesco a smettere&rdquo; e &ldquo;Rimuginare mi far&agrave; impazzire&rdquo;.</p>
+  <p style="margin-bottom:16px;color:var(--text-secondary)">Questi esercizi sono più intensi e hanno senso solo se appropriati per te e se le pratiche precedenti sono sufficientemente familiari. Le settimane indicate sono un orientamento, non una soglia obbligatoria. Servono a testare concretamente le tue paure: &ldquo;Non riesco a smettere&rdquo; e &ldquo;Rimuginare mi far&agrave; impazzire&rdquo;.</p>
   <div class="note"><strong>Importante:</strong> Se segui un terapeuta, parlane con lui prima di iniziare questa parte.</div>
 
   <div class="exercise" id="ex18">
@@ -1089,19 +1093,18 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   </div>
 
   <div class="exercise" id="ex20">
-    <h3><span class="num">Esercizio 20</span> Rimuginio Programmato a Casa <button class="timer-tag" data-time="600" data-label="Rimuginio Programmato 10 min">&#9200; 10 min</button></h3>
-    <div class="meta"><span>&#9200; 10 minuti &times; 3 volte</span><span>&#128259; In una settimana</span></div>
+    <h3><span class="num">Esercizio 20</span> Esperimento di Generalizzazione <button class="timer-tag" data-time="300" data-label="Esperimento di Generalizzazione 5 min">&#9200; 5 min</button></h3>
+    <div class="meta"><span>&#9200; 5 minuti</span><span>&#128259; In una situazione reale, quando il rimuginio compare</span></div>
+    <p>L’obiettivo è verificare cosa succede quando riconosci il rimuginio e scegli di non seguirlo automaticamente, senza creare un nuovo appuntamento obbligatorio con il worry.</p>
     <ol>
-      <li>Scegli, se questo esperimento è appropriato per te, fino a 3 momenti della settimana per osservare intenzionalmente il rimuginio.</li>
-      <li>Ogni sessione dura 10 minuti esatti (timer!).</li>
-      <li>Segna su un foglio: data, tema, ansia PRIMA (0&ndash;10), ansia DOPO (0&ndash;10), quanto controllo hai avuto nello smettere (0&ndash;10).</li>
+      <li>Durante una situazione reale, nota un episodio di rimuginio.</li>
+      <li>Riconosci semplicemente: “Sto rimuginando”. Non devi stabilire se il pensiero è vero o falso.</li>
+      <li>Per alcuni minuti, lascia il pensiero sullo sfondo e torna all’attività che avevi scelto.</li>
+      <li>Nota cosa rende più facile o più difficile riprendere l’attività. Non misurare ansia, minuti o “successo”.</li>
+      <li>Alla fine chiediti soltanto: “Sono riuscito a scegliere cosa fare dopo, anche se il pensiero era ancora presente?”.</li>
     </ol>
-    <p><strong>Cosa stai osservando:</strong> la differenza tra entrare automaticamente nel rimuginio e scegliere intenzionalmente quando dedicargli attenzione. Non è una prova che puoi controllare ogni pensiero in ogni momento.</p>
-    <div class="variants"><strong>Relazione con l&rsquo;Es. 18:</strong> questo esercizio è la versione sistematica dello stesso esperimento: l&rsquo;Es. 18 è il test singolo, l&rsquo;Es. 20 è la ripetizione programmata per consolidare l&rsquo;apprendimento. Non sono tecniche diverse.</div>
-    <div class="chk-wrap">
-      <input type="checkbox" id="chk20" data-key="ex20">
-      <label for="chk20">Ho fatto una sessione di rimuginio programmato oggi</label>
-    </div>
+    <div class="note"><strong>Nota:</strong> l’apprendimento riguarda il rapporto con il rimuginio e la possibilità di scegliere la risposta, non l’eliminazione dei pensieri. Se l’esercizio diventa una nuova procedura da controllare o ripetere perfettamente, lascialo cadere.</div>
+    <div class="chk-wrap"><input type="checkbox" id="chk20" data-key="ex20"><label for="chk20">Ho fatto questo esperimento oggi</label></div>
   </div>
 </section>
 
@@ -1243,7 +1246,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   </div>
 
   <div class="exercise" id="ex27">
-    <h3><span class="num">Esercizio 27</span> Il Tuo Coach Metacognitivo</h3>
+    <h3><span class="num">Esercizio 27</span> Il Tuo Nuovo Piano Metacognitivo</h3>
     <div class="meta"><span>&#9200; 5&ndash;10 minuti</span><span>&#128259; Dopo aver imparato tutte le tecniche</span></div>
     <p>Immagina che un amico abbia il tuo stesso problema e ti chieda aiuto. Come risponderesti senza rassicurarlo, senza promettere certezza e senza alimentare il controllo?</p>
     <div class="table-wrap">
@@ -1268,7 +1271,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
      ═══════════════════════════════════════ -->
 <section id="prossimi-passi">
   <h2 class="section-title">Prossimi Passi</h2>
-  <p style="margin-bottom:16px;color:var(--text-secondary)">Non devi fare tutti gli esercizi in una volta. La progressione è un orientamento, non un esame: se un passaggio non è adatto a te, fermati e valuta un percorso diverso.</p>
+  <p style="margin-bottom:16px;color:var(--text-secondary)">Non devi fare tutti gli esercizi in una volta. La progressione è un orientamento flessibile, non un protocollo obbligatorio: se un passaggio non è adatto a te, fermati e valuta un percorso diverso.</p>
   <ul class="timeline">
     <li data-week="1"><strong>Settimane 1&ndash;2:</strong> familiarizza con Esercizi 1&ndash;4 (ATT). Una pratica regolare è più importante del numero perfetto di sessioni.</li>
     <li data-week="3"><strong>Settimane 3&ndash;4:</strong> se l&rsquo;ATT è diventato familiare, aggiungi alcuni esercizi 5&ndash;11 (Detached Mindfulness). Mantieni l&rsquo;ATT come pratica di base.</li>
