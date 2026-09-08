@@ -359,6 +359,15 @@ body.focus-mode nav.sidebar { transform: translateX(-100%) !important; }
 @media (min-width: 768px) { body.focus-mode { padding-left: 0 !important; } body.focus-mode header { left: 0 !important; } }
 .header-btn { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; padding: 4px 8px; border-radius: 6px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; transition: background .15s; }
 .header-btn:hover { background: rgba(255,255,255,.15); }
+.header-btn.active { color: #ffb703; }
+
+/* ─── SVG ICONS (mobile-first, ereditano currentColor) ─── */
+.ic { width: 1.15em; height: 1.15em; flex: none; vertical-align: -0.2em; }
+.header-btn .ic { width: 22px; height: 22px; }
+.meta .ic { width: 15px; height: 15px; }
+.timer-tag .ic { width: 14px; height: 14px; vertical-align: -0.18em; }
+.back-to-top .ic { width: 22px; height: 22px; }
+.timer-controls .ic { width: 20px; height: 20px; vertical-align: -0.2em; }
 .timer-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .3s; }
 .timer-modal-overlay.show { opacity: 1; pointer-events: auto; }
 .timer-modal { background: var(--card-bg); border-radius: 20px; padding: 32px 28px; text-align: center; max-width: 380px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
@@ -400,13 +409,28 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 </head>
 <body>
 
+<!-- ═══ SVG SPRITE (icone stroke, currentColor) ═══ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+    <symbol id="i-repeat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 3.5V8h-4.5"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="5.5" width="16" height="15" rx="2.5"/><path d="M4 10.5h16M8.5 3v4.5M15.5 3v4.5"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 13.5A8.5 8.5 0 0 1 10.5 3.5a7 7 0 1 0 10 10z"/></symbol>
+    <symbol id="i-focus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 14.5l6-6 6 6"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></symbol>
+  </defs>
+</svg>
+
 <!-- ═══ HEADER ═══ -->
 <header>
-  <button class="header-btn hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
+  <button class="header-btn hamburger" id="hamburger" aria-label="Menu"><svg class="ic" aria-hidden="true"><use href="#i-menu"/></svg></button>
   <div class="logo">Esercizi Rimuginio <small>&mdash; Guida MCT</small></div>
-  <button class="header-btn" id="timerBtn" aria-label="Apri timer" title="Timer esercizi">&#9200;</button>
-  <button class="header-btn" id="focusBtn" aria-label="Modalita focus" title="Modalita focus">&#9641;</button>
-  <button class="header-btn" id="themeBtn" aria-label="Cambia tema" title="Dark/Light mode">&#9788;</button>
+  <button class="header-btn" id="timerBtn" aria-label="Apri timer" title="Timer esercizi"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg></button>
+  <button class="header-btn" id="focusBtn" aria-label="Modalita focus" title="Modalita focus"><svg class="ic" aria-hidden="true"><use href="#i-focus"/></svg></button>
+  <button class="header-btn" id="themeBtn" aria-label="Cambia tema" title="Dark/Light mode"><svg class="ic" aria-hidden="true"><use href="#i-sun"/></svg></button>
   <div class="progress-wrap" aria-label="Progresso del percorso">
     <span class="progress-label">Percorso</span>
     <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Percorso completato"><div class="progress-fill" id="progressFill"></div></div>
@@ -432,7 +456,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
     <div class="timer-controls">
       <button class="timer-btn-start" id="timerStart" aria-label="Avvia timer">&#9654; Avvia</button>
       <button class="timer-btn-pause" id="timerPause" style="display:none" aria-label="Pausa">&#9646;&#9646; Pausa</button>
-      <button class="timer-btn-reset" id="timerReset" aria-label="Resetta">&#8634;</button>
+      <button class="timer-btn-reset" id="timerReset" aria-label="Resetta"><svg class="ic" aria-hidden="true"><use href="#i-reset"/></svg></button>
     </div>
     <div class="timer-status" id="timerStatus"></div>
     <button class="timer-btn-close" id="timerClose" aria-label="Chiudi timer">Chiudi</button>
@@ -665,11 +689,11 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   <p style="margin-bottom:16px;color:var(--text-secondary)">Questi esercizi allenano la tua attenzione a spostarsi via dalla preoccupazione. L&rsquo;ATT (Attention Training Technique) &egrave; una tecnica attentiva usata in alcuni percorsi MCT e in altri contesti clinici: pu&ograve; essere utile come allenamento dell&rsquo;attenzione, ma non &egrave; un passaggio obbligatorio n&eacute; deve essere trattata come una cura in s&eacute;. La pratica va adattata al proprio percorso.</p>
 
   <div class="exercise" id="ex1">
-    <h3><span class="num">Esercizio 1</span> L&rsquo;ATT Base &mdash; 3 Fasi <button class="timer-tag" data-time="900" data-label="ATT Base 15 min">&#9200; 15 min</button></h3>
+    <h3><span class="num">Esercizio 1</span> L&rsquo;ATT Base &mdash; 3 Fasi <button class="timer-tag" data-time="900" data-label="ATT Base 15 min"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 15 min</button></h3>
     <div class="meta">
-      <span>&#9200; 12&ndash;15 minuti</span>
-      <span>&#128259; Frequenza regolare, compatibile con il tuo percorso</span>
-      <span>&#128197; Periodo di pratica indicativo</span>
+      <span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 12&ndash;15 minuti</span>
+      <span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Frequenza regolare, compatibile con il tuo percorso</span>
+      <span><svg class="ic" aria-hidden="true"><use href="#i-cal"/></svg> Periodo di pratica indicativo</span>
     </div>
     <p><strong>Obiettivo:</strong> imparare a spostare l&rsquo;attenzione <em>nonostante</em> l&rsquo;ansia. Non serve a calmarti.</p>
 
@@ -714,8 +738,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   </div>
 
   <div class="exercise" id="ex2">
-    <h3><span class="num">Esercizio 2</span> ATT Breve (3 minuti) <button class="timer-tag" data-time="180" data-label="ATT Breve 3 min">&#9200; 3 min</button></h3>
-    <div class="meta"><span>&#9200; 3 minuti</span><span>&#128259; Nei momenti di picco del rimuginio</span></div>
+    <h3><span class="num">Esercizio 2</span> ATT Breve (3 minuti) <button class="timer-tag" data-time="180" data-label="ATT Breve 3 min"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 3 min</button></h3>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 3 minuti</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Nei momenti di picco del rimuginio</span></div>
     <p>Da usare quando senti di &ldquo;perdere il controllo&rdquo; o hai un picco di ansia.</p>
     <ol>
       <li>30 secondi: scegli un suono e ascolta SOLO quello.</li>
@@ -746,7 +770,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   <div class="exercise" id="ex4">
     <h3><span class="num">Esercizio 4</span> Diario dell&rsquo;ATT</h3>
-    <div class="meta"><span>&#9200; 30 secondi</span><span>&#128259; Dopo ogni sessione di ATT</span></div>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 30 secondi</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Dopo ogni sessione di ATT</span></div>
     <p>Compila ogni giorno per monitorare la tua costanza.</p>
     <div class="table-wrap">
     <table>
@@ -776,8 +800,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   <p style="margin-bottom:16px;color:var(--text-secondary)">Impari a stare con i tuoi pensieri senza farti risucchiare. Un pensiero e&rsquo; solo un evento mentale, non un fatto reale. Tu puoi osservarlo senza doverlo seguire, analizzare o combattere.</p>
 
   <div class="exercise" id="ex5">
-    <h3><span class="num">Esercizio 5</span> La Tigre <button class="timer-tag" data-time="300" data-label="Tigre 5 min">&#9200; 5 min</button></h3>
-    <div class="meta"><span>&#9200; 5 minuti</span><span>&#128259; Quando le pratiche dell&rsquo;ATT ti sono sufficientemente familiari</span></div>
+    <h3><span class="num">Esercizio 5</span> La Tigre <button class="timer-tag" data-time="300" data-label="Tigre 5 min"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 5 min</button></h3>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 5 minuti</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Quando le pratiche dell&rsquo;ATT ti sono sufficientemente familiari</span></div>
     <ol>
       <li>Chiudi gli occhi.</li>
       <li>Immagina una tigre. Non una tigre specifica. Una tigre qualunque.</li>
@@ -800,8 +824,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   </div>
 
   <div class="exercise" id="ex6">
-    <h3><span class="num">Esercizio 6</span> La Radio in un&rsquo;Altra Stanza <button class="timer-tag" data-time="300" data-label="Radio 5 min">&#9200; 5 min</button></h3>
-    <div class="meta"><span>&#9200; 3&ndash;5 minuti</span><span>&#128259; Quando un pensiero ti sta agganciando</span></div>
+    <h3><span class="num">Esercizio 6</span> La Radio in un&rsquo;Altra Stanza <button class="timer-tag" data-time="300" data-label="Radio 5 min"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 5 min</button></h3>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 3&ndash;5 minuti</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Quando un pensiero ti sta agganciando</span></div>
     <ol>
       <li>Prendi la preoccupazione che hai in questo momento.</li>
       <li>Immagina che sia una radio accesa in un&rsquo;altra stanza.</li>
@@ -817,7 +841,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   <div class="exercise" id="ex7">
     <h3><span class="num">Esercizio 7</span> Soppressione vs. Non-Intervento</h3>
-    <div class="meta"><span>&#9200; 5 minuti</span><span>&#128259; Un test da fare 2&ndash;3 volte</span></div>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 5 minuti</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Un test da fare 2&ndash;3 volte</span></div>
     <p><strong>Parte 1 &mdash; Soppressione (30 sec):</strong></p>
     <ol>
       <li>Pensa a una preoccupazione specifica di questa settimana.</li>
@@ -838,7 +862,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   <div class="exercise" id="ex8">
     <h3><span class="num">Esercizio 8</span> Le Parole che Attivano</h3>
-    <div class="meta"><span>&#9200; 5&ndash;8 minuti</span><span>&#128259; 2&ndash;3 volte prima del Worry Postponement</span></div>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 5&ndash;8 minuti</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> 2&ndash;3 volte prima del Worry Postponement</span></div>
     <p><strong>Fase 1 &mdash; Parole neutre:</strong> Chiedi a qualcuno di leggerti queste parole, una alla volta con 3&ndash;4 secondi di pausa. Tu ascolti e basta. Se arriva un pensiero, lo lasci passare e torni alla parola successiva.</p>
     <div class="variants"><strong>Se sei da solo:</strong> registrati mentre leggi le parole (usa il registratore vocale del telefono), poi riascoltati. Oppure copiale in un text-to-speech online (es. TTSFree.com) e lasciale leggere. L'importante &egrave; che la voce sia esterna a te &mdash; se le leggi tu mentalmente, l'esercizio non funziona perch&eacute; sei tu a generare gli stimoli.</div>
     <div class="variants">Tavolo &mdash; Nuvola &mdash; Finestra &mdash; Libro &mdash; Strada &mdash; Cielo &mdash; Sedia &mdash; Acqua &mdash; Montagna &mdash; Pianta &mdash; Porta &mdash; Lampada &mdash; Tappeto &mdash; Specchio &mdash; Cuscino</div>
@@ -853,7 +877,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   <div class="exercise" id="ex9">
     <h3><span class="num">Esercizio 9</span> Etichettare i Pensieri</h3>
-    <div class="meta"><span>&#9200; 5 minuti</span><span>&#128259; In qualunque momento della giornata</span></div>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 5 minuti</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> In qualunque momento della giornata</span></div>
     <ol>
       <li>Per 3 minuti, nota i pensieri che arrivano.</li>
       <li>Per ognuno, dagli un&rsquo;etichetta: &ldquo;preoccupazione&rdquo;, &ldquo;pianificazione&rdquo;, &ldquo;ricordo&rdquo;, &ldquo;giudizio&rdquo;, &ldquo;fantasia&rdquo;, &ldquo;rimuginio&rdquo;.</li>
@@ -867,8 +891,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   </div>
 
   <div class="exercise" id="ex10">
-    <h3><span class="num">Esercizio 10</span> Il Fiume dei Pensieri <button class="timer-tag" data-time="600" data-label="Fiume 10 min">&#9200; 10 min</button></h3>
-    <div class="meta"><span>&#9200; 10 minuti</span><span>&#128259; Dopo aver imparato gli esercizi 5&ndash;9</span></div>
+    <h3><span class="num">Esercizio 10</span> Il Fiume dei Pensieri <button class="timer-tag" data-time="600" data-label="Fiume 10 min"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 10 min</button></h3>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 10 minuti</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Dopo aver imparato gli esercizi 5&ndash;9</span></div>
     <ol>
       <li>Chiudi gli occhi.</li>
       <li>Immagina di essere seduto sulla riva di un fiume. I tuoi pensieri sono oggetti che galleggiano: foglie, rametti, barchette.</li>
@@ -883,8 +907,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   </div>
 
   <div class="exercise" id="ex11">
-    <h3><span class="num">Esercizio 11</span> I 6 Punti della DM <button class="timer-tag" data-time="180" data-label="6 Punti 3 min">&#9200; 3 min</button></h3>
-    <div class="meta"><span>&#9200; 3&ndash;5 minuti</span><span>&#128259; Ogni mattina, per la prima settimana</span></div>
+    <h3><span class="num">Esercizio 11</span> I 6 Punti della DM <button class="timer-tag" data-time="180" data-label="6 Punti 3 min"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 3 min</button></h3>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 3&ndash;5 minuti</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Ogni mattina, per la prima settimana</span></div>
     <p>I 6 punti non sono un mantra da ripetere: sono un <strong>micro-esercizio</strong>. Ogni mattina, per 3&ndash;5 minuti, leggili uno alla volta e fai subito la prova pratica che indica:</p>
     <ol>
       <li><strong>NOTO</strong> il pensiero nel momento in cui arriva. <em>Prova:</em> per 30 secondi osserva i pensieri che arrivano e dì dentro di te &ldquo;ecco un pensiero&rdquo; appena lo noti. Non dopo 20 minuti di rimuginio: ora.</li>
@@ -902,8 +926,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   </div>
 
   <div class="exercise" id="ex12">
-    <h3><span class="num">Esercizio 12</span> ATT nel Compito <button class="timer-tag" data-time="300" data-label="ATT Compito 5 min">&#9200; 5 min</button></h3>
-    <div class="meta"><span>&#9200; 1&ndash;2 minuti &times; 5 volte al giorno</span><span>&#128259; Ogni giorno, durante la vita reale</span></div>
+    <h3><span class="num">Esercizio 12</span> ATT nel Compito <button class="timer-tag" data-time="300" data-label="ATT Compito 5 min"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 5 min</button></h3>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 1&ndash;2 minuti &times; 5 volte al giorno</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Ogni giorno, durante la vita reale</span></div>
     <p><strong>Obiettivo:</strong> portare l&rsquo;ATT fuori dalla sessione formale. La palestra attentiva serve a questo: riportare l&rsquo;attenzione a quello che stai facendo, anche mentre il rimuginio bussa.</p>
     <ol>
       <li>Scegli 5 momenti della giornata in cui farai questo micro-esercizio (es. dopo i pasti, quando cambi stanza, quando apri il telefono).</li>
@@ -921,7 +945,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   <div class="exercise" id="ex13">
     <h3><span class="num">Esercizio 13</span> Monitoraggio delle Minacce</h3>
-    <div class="meta"><span>&#9200; 3 giorni di pratica</span><span>&#128259; Quando ti accorgi di &ldquo;scandagliare&rdquo;</span></div>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 3 giorni di pratica</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Quando ti accorgi di &ldquo;scandagliare&rdquo;</span></div>
     <p><strong>Obiettivo:</strong> il monitoraggio delle minacce è uno dei tre motori della CAS (insieme a rimuginio e strategie disfunzionali). È il radar che scansiona il corpo, gli altri e il mondo in cerca di pericoli. Finchè resta automatico, alimenta l&rsquo;ansia. Questo esercizio lo rende visibile &mdash; e poi opzionale.</p>
     <ol>
       <li>Per 3 giorni, ogni volta che noti di stare scandagliando, fermati un attimo. Il radar suona quando: controlli sensazioni fisiche (battito, respiro, tensione), osservi le espressioni degli altri, rileggi notizie o messaggi alla ricerca di segnali, ricontrolli cosa hai scritto o fatto.</li>
@@ -938,7 +962,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   <div class="exercise" id="ex14">
     <h3><span class="num">Esercizio 14</span> Rinvio della Rassicurazione</h3>
-    <div class="meta"><span>&#9200; 24 ore di pratica</span><span>&#128259; 2&ndash;3 volte a settimana</span></div>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 24 ore di pratica</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> 2&ndash;3 volte a settimana</span></div>
     <p><strong>Obiettivo:</strong> la ricerca di rassicurazione è la strategia disfunzionale più frequente nel rimuginio: cercare conferme su Google, chiedere al partner, agli amici o al medico. Il problema? La rassicurazione funziona per mezz&rsquo;ora, poi l&rsquo;ansia torna e la richiesta ricomincia. Così la mente impara che senza conferma non puoi stare bene.</p>
     <ol>
       <li>Scegli una rassicurazione che fai di solito: cercare un sintomo, chiedere &ldquo;secondo te va tutto bene?&rdquo;, rileggere una risposta, verificare più volte.</li>
@@ -963,8 +987,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   <p style="margin-bottom:16px;color:var(--text-secondary)">Il Worry Postponement pu&ograve; essere introdotto quando le pratiche di base sono sufficientemente familiari. Le 2 settimane indicate qui sono un orientamento, non un requisito universale: non &egrave; necessario aspettare un numero preciso di giorni e non &egrave; necessario forzarlo se non &egrave; appropriato.</p>
 
   <div class="exercise" id="ex15">
-    <h3><span class="num">Esercizio 15</span> Impostare il Momento Preoccupazione <button class="timer-tag" data-time="900" data-label="WP 15 min">&#9200; 15 min</button></h3>
-    <div class="meta"><span>&#9200; 15 minuti al giorno</span><span>&#128259; Ogni giorno, orario fisso</span></div>
+    <h3><span class="num">Esercizio 15</span> Impostare il Momento Preoccupazione <button class="timer-tag" data-time="900" data-label="WP 15 min"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 15 min</button></h3>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 15 minuti al giorno</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Ogni giorno, orario fisso</span></div>
 
     <h4 style="color:var(--primary);margin:12px 0 4px">Passo 1 &mdash; Scegli orario e luogo</h4>
     <ul>
@@ -1009,7 +1033,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   <div class="exercise" id="ex16">
     <h3><span class="num">Esercizio 16</span> Il Test dei 15 Secondi</h3>
-    <div class="meta"><span>&#9200; 30 secondi</span><span>&#128259; Quando pensi &ldquo;non ce la faccio a rimandare&rdquo;</span></div>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 30 secondi</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Quando pensi &ldquo;non ce la faccio a rimandare&rdquo;</span></div>
     <ol>
       <li>Arriva la preoccupazione. La scrivi.</li>
       <li>Ti dici: &ldquo;Lo affronto alle [orario].&rdquo;</li>
@@ -1026,7 +1050,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   <div class="exercise" id="ex17">
     <h3><span class="num">Esercizio 17</span> Progressione del Rinvio</h3>
-    <div class="meta"><span>&#128259; Da seguire nel tempo</span></div>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Da seguire nel tempo</span></div>
     <p>Non &egrave; necessario rimanere fermo alla stessa modalit&agrave; per sempre: le fasi seguenti sono un orientamento, non un calendario da rispettare.</p>
     <ul>
       <li><strong>All&rsquo;inizio:</strong> SCRIVI ogni preoccupazione sul block notes, quando ti &egrave; utile. Fai il worry period col notes davanti.</li>
@@ -1049,8 +1073,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   <div class="note"><strong>Importante:</strong> Se segui un terapeuta, parlane con lui prima di iniziare questa parte.</div>
 
   <div class="exercise" id="ex18">
-    <h3><span class="num">Esercizio 18</span> Rimuginare Volontariamente <button class="timer-tag" data-time="600" data-label="Rimuginio Volontario 10 min">&#9200; 10 min</button></h3>
-    <div class="meta"><span>&#9200; 10 minuti</span><span>&#128259; 2&ndash;3 volte in una settimana</span></div>
+    <h3><span class="num">Esercizio 18</span> Rimuginare Volontariamente <button class="timer-tag" data-time="600" data-label="Rimuginio Volontario 10 min"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 10 min</button></h3>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 10 minuti</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> 2&ndash;3 volte in una settimana</span></div>
     <p><strong>Testa la credenza: &ldquo;Non riesco a smettere&rdquo;</strong></p>
     <ol>
       <li>Siediti in un posto tranquillo. Timer: 10 minuti.</li>
@@ -1069,8 +1093,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   </div>
 
   <div class="exercise" id="ex19">
-    <h3><span class="num">Esercizio 19</span> Esperimento sulla paura di perdere il controllo <button class="timer-tag" data-time="600" data-label="Esperimento 10 min">&#9200; 10 min</button></h3>
-    <div class="meta"><span>&#9200; Versione graduale: 2 min &rarr; 5 min &rarr; 10 min</span><span>&#128259; Solo se appropriato per te</span></div>
+    <h3><span class="num">Esercizio 19</span> Esperimento sulla paura di perdere il controllo <button class="timer-tag" data-time="600" data-label="Esperimento 10 min"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 10 min</button></h3>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> Versione graduale: 2 min &rarr; 5 min &rarr; 10 min</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Solo se appropriato per te</span></div>
 
     <div class="note"><strong>&#9888; Prima di iniziare:</strong> questo è uno degli esercizi più intensi del percorso. Non è obbligatorio e non va usato per "testare fino a che punto resisti". Se hai un terapeuta, concordalo con lui/lei. Evitalo se sei in una fase di forte instabilità o se gli esercizi precedenti ti hanno lasciato molto agitato. Se il disagio diventa eccessivo, interrompi l&rsquo;esperimento: fermarsi non significa aver fallito.</div>
 
@@ -1093,8 +1117,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   </div>
 
   <div class="exercise" id="ex20">
-    <h3><span class="num">Esercizio 20</span> Esperimento di Generalizzazione <button class="timer-tag" data-time="300" data-label="Esperimento di Generalizzazione 5 min">&#9200; 5 min</button></h3>
-    <div class="meta"><span>&#9200; 5 minuti</span><span>&#128259; In una situazione reale, quando il rimuginio compare</span></div>
+    <h3><span class="num">Esercizio 20</span> Esperimento di Generalizzazione <button class="timer-tag" data-time="300" data-label="Esperimento di Generalizzazione 5 min"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 5 min</button></h3>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 5 minuti</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> In una situazione reale, quando il rimuginio compare</span></div>
     <p>L’obiettivo è verificare cosa succede quando riconosci il rimuginio e scegli di non seguirlo automaticamente, senza creare un nuovo appuntamento obbligatorio con il worry.</p>
     <ol>
       <li>Durante una situazione reale, nota un episodio di rimuginio.</li>
@@ -1117,7 +1141,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   <div class="exercise" id="ex21">
     <h3><span class="num">Esercizio 21</span> Valutazione Quotidiana (30 secondi)</h3>
-    <div class="meta"><span>&#9200; 30 secondi</span><span>&#128259; Ogni sera prima di dormire</span></div>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 30 secondi</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Ogni sera prima di dormire</span></div>
     <p>Rispondi a 3 domande su scala 0&ndash;10. Usa queste ancore per rispondere in modo coerente ogni giorno:</p>
     <div class="variants">
       <strong>Tempo rimuginio (0&ndash;10):</strong><br>
@@ -1148,7 +1172,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   <div class="exercise" id="ex22">
     <h3><span class="num">Esercizio 22</span> Il Piano Anti-Ricaduta</h3>
-    <div class="meta"><span>&#128259; Da compilare e tenere sempre visibile</span></div>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Da compilare e tenere sempre visibile</span></div>
     <div class="table-wrap">
     <table>
       <tr><th>Area</th><th>Il mio piano</th></tr>
@@ -1168,7 +1192,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   <div class="exercise" id="ex23">
     <h3><span class="num">Esercizio 23</span> Scenario &mdash; Cosa fare se&hellip;</h3>
-    <div class="meta"><span>&#128259; Leggi e memorizza</span></div>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Leggi e memorizza</span></div>
     <div class="table-wrap">
     <table>
       <tr><th>Se succede questo&hellip;</th><th>&hellip;io faccio questo</th></tr>
@@ -1189,7 +1213,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   <div class="exercise" id="ex24">
     <h3><span class="num">Esercizio 24</span> Le 2 Settimane di Prova</h3>
-    <div class="meta"><span>&#9200; 2 settimane</span><span>&#128259; Se non sei ancora convinto che funzioni</span></div>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 2 settimane</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Se non sei ancora convinto che funzioni</span></div>
     <ol>
       <li>Per un periodo di prova indicativo (ad esempio due settimane), mantieni una pratica regolare di ATT, compatibile con il tuo percorso.</li>
       <li>Quando le pratiche di base sono sufficientemente familiari, puoi aggiungere il Worry Postponement, se appropriato per te.</li>
@@ -1204,7 +1228,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   <div class="exercise" id="ex25">
     <h3><span class="num">Esercizio 25</span> La Cassetta degli Attrezzi</h3>
-    <div class="meta"><span>&#128259; Riepilogo per ricordare cosa usare</span></div>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Riepilogo per ricordare cosa usare</span></div>
     <div class="table-wrap">
     <table>
       <tr><th>Tecnica</th><th>Quando la uso</th></tr>
@@ -1224,7 +1248,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   <div class="exercise" id="ex26">
     <h3><span class="num">Esercizio 26</span> Diario del Rimuginio Settimanale</h3>
-    <div class="meta"><span>&#9200; 5 minuti</span><span>&#128259; Una volta a settimana</span></div>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 5 minuti</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Una volta a settimana</span></div>
     <div class="table-wrap">
     <table>
       <tr><th>Settimana</th><th>Media rimuginio</th><th>Media controllo ATT</th><th>Media coping</th></tr>
@@ -1247,7 +1271,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
   <div class="exercise" id="ex27">
     <h3><span class="num">Esercizio 27</span> Il Tuo Nuovo Piano Metacognitivo</h3>
-    <div class="meta"><span>&#9200; 5&ndash;10 minuti</span><span>&#128259; Dopo aver imparato tutte le tecniche</span></div>
+    <div class="meta"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> 5&ndash;10 minuti</span><span><svg class="ic" aria-hidden="true"><use href="#i-repeat"/></svg> Dopo aver imparato tutte le tecniche</span></div>
     <p>Immagina che un amico abbia il tuo stesso problema e ti chieda aiuto. Come risponderesti senza rassicurarlo, senza promettere certezza e senza alimentare il controllo?</p>
     <div class="table-wrap">
     <table>
@@ -1292,7 +1316,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 </main>
 
 <!-- ═══ BACK TO TOP ═══ -->
-<button class="back-to-top" id="backToTop" aria-label="Torna su" title="Torna su">&#9650;</button>
+<button class="back-to-top" id="backToTop" aria-label="Torna su" title="Torna su"><svg class="ic" aria-hidden="true"><use href="#i-up"/></svg></button>
 
 <!-- ═══════════════════════════════════════
      JAVASCRIPT
@@ -1304,9 +1328,12 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   var html = document.documentElement;
   var THEME_KEY = 'mct_theme';
 
+  var ICON_SUN = '<svg class="ic" aria-hidden="true"><use href="#i-sun"/></svg>';
+  var ICON_MOON = '<svg class="ic" aria-hidden="true"><use href="#i-moon"/></svg>';
+
   function setTheme(theme) {
     html.setAttribute('data-theme', theme);
-    themeBtn.innerHTML = theme === 'dark' ? '\u263E' : '\u2600';
+    themeBtn.innerHTML = theme === 'dark' ? ICON_MOON : ICON_SUN;
     try { localStorage.setItem(THEME_KEY, theme); } catch(e) {}
   }
 
@@ -1339,7 +1366,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   focusBtn.addEventListener('click', function() {
     focusMode = !focusMode;
     document.body.classList.toggle('focus-mode', focusMode);
-    focusBtn.innerHTML = focusMode ? '\u25A3' : '\u25A1';
+    focusBtn.classList.toggle('active', focusMode);
     focusBtn.title = focusMode ? 'Esci modalita focus' : 'Modalita focus';
     showToast(focusMode ? 'Modalita focus attiva' : 'Modalita focus disattivata');
   });
