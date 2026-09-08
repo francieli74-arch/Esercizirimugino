@@ -1,0 +1,205 @@
+name: Finalize v7 source refactor
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    if: "!contains(github.event.head_commit.message, 'finalize v7')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Apply source-level corrections
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8-sig')
+          original = s
+
+          replacements = [
+            (
+              'Questi esercizi allenano la tua attenzione a spostarsi via dalla preoccupazione. Come in palestra: risultati dopo 4&ndash;6 settimane di pratica costante, non dopo 2 giorni.',
+              'Questi esercizi allenano la tua attenzione a spostarsi via dalla preoccupazione. L&rsquo;ATT (Attention Training Technique) &egrave; una tecnica attentiva usata in alcuni percorsi MCT e in altri contesti clinici: pu&ograve; essere utile come allenamento dell&rsquo;attenzione, ma non &egrave; un passaggio obbligatorio n&eacute; deve essere trattata come una cura in s&eacute;. La pratica va adattata al proprio percorso.'
+            ),
+            (
+              '<span>&#128259; 2 volte al giorno (mattina e sera)</span>\n      <span>&#128197; Per 6 settimane</span>',
+              '<span>&#128259; Frequenza regolare, compatibile con il tuo percorso</span>\n      <span>&#128197; Periodo di pratica indicativo</span>'
+            ),
+            (
+              'Si fa anche in ufficio, in macchina (a occhi aperti), o prima di una riunione.',
+              '<strong>Pu&ograve; essere praticato in contesti quotidiani in cui puoi mantenere piena attenzione all&rsquo;ambiente.</strong> Non praticarlo mentre guidi o svolgi attivit&agrave; che richiedono attenzione continua alla sicurezza.'
+            ),
+            (
+              'Progressione: Giorno 1&ndash;3: radio a 5 metri. Giorno 4&ndash;6: a 10 metri. Giorno 7+: in un&rsquo;altra stanza. Variante: abbassa il volume da 10 a 0 in 10 secondi.',
+              'Progressione: Giorno 1&ndash;3: radio a 5 metri. Giorno 4&ndash;6: a 10 metri. Giorno 7+: in un&rsquo;altra stanza. L&rsquo;obiettivo non &egrave; abbassare o eliminare il pensiero, ma lasciarlo sullo sfondo senza seguirlo.'
+            ),
+            (
+              'Obiettivo: almeno 12 sessioni su 14 nella settimana. La difficolt&agrave; media dovrebbe scendere col tempo.',
+              'Obiettivo: costruire una pratica regolare ma sostenibile. Non serve raggiungere un numero perfetto di sessioni n&eacute; ottenere una difficolt&agrave; sempre pi&ugrave; bassa.'
+            ),
+            (
+              'Obiettivo: almeno 12 sessioni su 14 nella settimana. La difficoltà media dovrebbe scendere col tempo.',
+              'Obiettivo: costruire una pratica regolare ma sostenibile. Non serve raggiungere un numero perfetto di sessioni né ottenere una difficoltà sempre più bassa.'
+            ),
+            (
+              'Per 24 ore, niente ricerca: niente Google, niente domande, niente ricontrolli. Se il bisogno torna, annota l’ora e l’intensità (0–10) e rimanda di nuovo.',
+              'Per 24 ore, prova a rinviare le ricerche, le domande o i ricontrolli che riconosci come rassicurazione ansiosa ripetitiva. Non è necessario trasformare il rinvio in una regola assoluta: l’esperimento riguarda la ricerca di certezza che ripeti senza ottenere nuove informazioni utili. Questo non vale per controlli medici, indicazioni professionali, scadenze o verifiche di sicurezza necessarie.'
+            ),
+            (
+              'Dopo 24 ore, prima di cedere, valuta: “è successo qualcosa di grave nel frattempo?” Poi decidi se la rassicurazione serve ancora davvero.',
+              'Dopo 24 ore, chiediti: “La verifica che volevo fare era una necessità concreta o soprattutto un tentativo ripetitivo di sentirmi certo?”. Se è una necessità reale, falla seguendo le indicazioni appropriate; se è rassicurazione ripetitiva, puoi scegliere di non seguirla subito.'
+            ),
+            (
+              'Si inizia SOLO dopo almeno 2 settimane di ATT. L’ATT ti ha dato i “muscoli attentivi” per poter rimandare. Senza quelli, il rinvio fallisce.',
+              'Il Worry Postponement può essere introdotto quando le pratiche di base sono sufficientemente familiari. Le 2 settimane indicate qui sono un orientamento, non un requisito universale: non è necessario aspettare un numero preciso di giorni e non è necessario forzarlo se non è appropriato.'
+            ),
+            (
+              'Si inizia SOLO dopo almeno 2 settimane di ATT. L&rsquo;ATT ti ha dato i “muscoli attentivi” per poter rimandare. Senza quelli, il rinvio fallisce.',
+              'Il Worry Postponement pu&ograve; essere introdotto quando le pratiche di base sono sufficientemente familiari. Le 2 settimane indicate qui sono un orientamento, non un requisito universale: non &egrave; necessario aspettare un numero preciso di giorni e non &egrave; necessario forzarlo se non &egrave; appropriato.'
+            ),
+            (
+              'Fai questi esercizi SOLO dopo almeno 4 settimane di ATT e DM. Servono a testare concretamente le tue paure:',
+              'Questi esercizi sono più intensi e hanno senso solo se appropriati per te e se le pratiche precedenti sono sufficientemente familiari. Le settimane indicate sono un orientamento, non una soglia obbligatoria. Servono a testare concretamente le tue paure:'
+            ),
+            (
+              'La progressione è un orientamento, non un esame:',
+              'La progressione è un orientamento flessibile, non un protocollo obbligatorio:'
+            ),
+            (
+              'La progressione &egrave; un orientamento, non un esame:',
+              'La progressione &egrave; un orientamento flessibile, non un protocollo obbligatorio:'
+            )
+          ]
+          for old, new in replacements:
+              s = s.replace(old, new)
+
+          # Avoid mandatory checklist behaviour.
+          s = s.replace('Prova ogni esercizio almeno 3–4 volte prima di decidere se ti serve.', 'Puoi provare un esercizio alcune volte, se è appropriato, prima di decidere se ti è utile. Non devi completare tutti gli esercizi.')
+          s = s.replace('Segui l’ordine della progressione consigliata in fondo alla pagina.', 'Usa la progressione consigliata come orientamento flessibile, non come sequenza obbligatoria.')
+
+          # Safer ATT wording for exercise 3.
+          s = s.replace('ATT con gli Occhi Aperti', 'Allenamento della Flessibilità Attentiva a Occhi Aperti')
+          s = s.replace('Variante per quando non puoi chiudere gli occhi', 'Variante di allenamento attentivo per quando non puoi chiudere gli occhi')
+
+          # Exercise 20: replace only the concrete DOM node, preserving its controls and checklist.
+          pattern = re.compile(r'<div class="exercise" id="ex20">.*?</div>\s*<div class="exercise" id="ex21">', re.S)
+          ex20 = '''<div class="exercise" id="ex20">
+    <h3><span class="num">Esercizio 20</span> Esperimento di Generalizzazione <button class="timer-tag" data-time="300" data-label="Esperimento di Generalizzazione 5 min">&#9200; 5 min</button></h3>
+    <div class="meta"><span>&#9200; 5 minuti</span><span>&#128259; In una situazione reale, quando il rimuginio compare</span></div>
+    <p>L’obiettivo è verificare cosa succede quando riconosci il rimuginio e scegli di non seguirlo automaticamente, senza creare un nuovo appuntamento obbligatorio con il worry.</p>
+    <ol>
+      <li>Durante una situazione reale, nota un episodio di rimuginio.</li>
+      <li>Riconosci semplicemente: “Sto rimuginando”. Non devi stabilire se il pensiero è vero o falso.</li>
+      <li>Per alcuni minuti, lascia il pensiero sullo sfondo e torna all’attività che avevi scelto.</li>
+      <li>Nota cosa rende più facile o più difficile riprendere l’attività. Non misurare ansia, minuti o “successo”.</li>
+      <li>Alla fine chiediti soltanto: “Sono riuscito a scegliere cosa fare dopo, anche se il pensiero era ancora presente?”.</li>
+    </ol>
+    <div class="note"><strong>Nota:</strong> l’apprendimento riguarda il rapporto con il rimuginio e la possibilità di scegliere la risposta, non l’eliminazione dei pensieri. Se l’esercizio diventa una nuova procedura da controllare o ripetere perfettamente, lascialo cadere.</div>
+    <div class="chk-wrap"><input type="checkbox" id="chk20"><label for="chk20">Ho fatto questo esperimento oggi</label></div>
+  </div>
+
+  <div class="exercise" id="ex21">'''
+          s, n = pattern.subn(ex20, s, count=1)
+          if n != 1:
+              raise SystemExit('Exercise 20 replacement failed')
+
+          # Exercise 27 naming.
+          s = s.replace('Il Tuo Coach Metacognitivo', 'Il Tuo Nuovo Piano Metacognitivo')
+
+          # Insert anti-ritual note once.
+          anchor = '<div class="exercise">\n    <h3><span class="num">&#9679;</span> Come usare questa guida</h3>'
+          if 'anti-ritual-note' not in s and anchor in s:
+              note = '\n    <div class="note anti-ritual-note"><strong>Anti-rituale:</strong> esercizi, caselle, timer, punteggi e diari sono strumenti, non obiettivi. Non devi completarli perfettamente, tutti i giorni, né controllare continuamente se li stai usando “bene”. Se il monitoraggio del percorso diventa una nuova fonte di preoccupazione o controllo, riducilo e torna alle pratiche essenziali.</div>'
+              s = s.replace(anchor, anchor + note, 1)
+
+          # Privacy note near safety content.
+          if 'dati e i progressi' not in s:
+              marker = '<div class="safety-card">'
+              if marker in s:
+                  s = s.replace(marker, marker + '\n    <p><strong>Privacy:</strong> dati, progressi e annotazioni restano nel browser su questo dispositivo; non vengono inviati a un server. Su un dispositivo condiviso, altre persone che usano lo stesso profilo/browser potrebbero comunque accedere ai dati locali.</p>\n    <p><strong>Export:</strong> il file JSON esportato può contenere informazioni personali o sensibili. Conservalo e condividilo con la stessa attenzione che useresti per un documento personale.</p>', 1)
+
+          # Version marker.
+          s = re.sub(r'(<meta name="description"[^>]*>)', r'\1\n<meta name="app-version" content="mct-v7">', s, count=1)
+          s = s.replace('/* ─── V3: CLINICAL SAFETY / TODAY / CALM UX ─── */', '/* ─── V7: CLINICAL SAFETY / TODAY / CALM UX ─── */')
+
+          p.write_text(s, encoding='utf-8')
+          print('index.html updated:', len(original), '->', len(s), 'bytes')
+
+          # Replace service worker with a normal cache/offline implementation.
+          Path('sw.js').write_text('''/* Service Worker — Gestire il Rimuginio v7 */
+const CACHE = 'mct-v7';
+const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon.svg'];
+
+self.addEventListener('install', event => {
+  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(caches.keys().then(keys => Promise.all(
+    keys.filter(key => key !== CACHE).map(key => caches.delete(key))
+  )).then(() => self.clients.claim()));
+});
+
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  const url = new URL(request.url);
+  if (url.origin !== location.origin || request.method !== 'GET') return;
+
+  if (request.mode === 'navigate' || url.pathname.endsWith('/index.html') || url.pathname.endsWith('/')) {
+    event.respondWith(
+      fetch(request).then(response => {
+        if (response && response.ok) {
+          const copy = response.clone();
+          caches.open(CACHE).then(cache => cache.put('./index.html', copy));
+        }
+        return response;
+      }).catch(() => caches.match('./index.html'))
+    );
+    return;
+  }
+
+  event.respondWith(
+    caches.match(request).then(cached => cached || fetch(request).then(response => {
+      if (response && response.ok) {
+        const copy = response.clone();
+        caches.open(CACHE).then(cache => cache.put(request, copy));
+      }
+      return response;
+    }))
+  );
+});
+''', encoding='utf-8')
+
+          # Keep one explicit README source of truth.
+          readme = Path('README_V3.md')
+          if readme.exists():
+              txt = readme.read_text(encoding='utf-8-sig')
+              txt = txt.replace('# Gestire il Rimuginio — V3', '# Gestire il Rimuginio — V7')
+              txt = txt.replace('Versione 3 della guida web', 'Versione 7 della guida web')
+              txt = txt.replace('Il Tuo Coach Metacognitivo', 'Il Tuo Nuovo Piano Metacognitivo')
+              txt = txt.replace('Service worker corretto e aggiornato a v3', 'Service worker v7, cache/offline senza patching runtime dell’HTML')
+              txt += '\n## Versione\n\nV7 è la fonte corrente del progetto. `index.html` contiene direttamente il contenuto pubblicato; `sw.js` gestisce solo cache e fallback offline.\n'
+              readme.write_text(txt, encoding='utf-8')
+
+      - name: Commit source refactor
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html sw.js README_V3.md
+          git commit -m "finalize v7 source refactor" || exit 0
+          git push
+
+      - name: Remove migration workflow
+        if: success()
+        run: |
+          git rm .github/workflows/finalize-v7.yml
+          git commit -m "finalize v7 remove migration workflow" || exit 0
+          git push
